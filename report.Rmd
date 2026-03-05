@@ -1,0 +1,282 @@
+---
+title: "STAT443 Project Report"
+author: "Juan Sandoval"
+output: html_document
+date: "2026-03-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Project goals
+The goal of this project is to use the GUIDE algorithm to identify important predictors of Airbnb listing prices and to compare these results with models trained independently using Python.
+
+# Data preparation
+The Airbnb dataset used for this analysis was obtained from Kaggle and imported into Python using the `kagglehub` package. The training data was loaded into a pandas DataFrame for preprocessing and exploratory inspection.
+
+To prepare the dataset for regression tree modeling, a subset of variables relevant to pricing was selected. These variables include host characteristics, listing capacity, availability indicators, and review information. The selected variables were:
+
+- host_response_rate  
+- host_acceptance_rate  
+- host_is_superhost  
+- accommodates  
+- bathrooms_text  
+- beds  
+- price  
+- minimum_nights  
+- maximum_nights  
+- has_availability  
+- number_of_reviews  
+- review_scores_rating  
+- instant_bookable  
+- reviews_per_month  
+
+Missing values were examined across all variables to understand the degree of incomplete data. For modeling purposes, missing values were later imputed using the default GUIDE handling procedure.
+
+Some variables required transformation before analysis. In particular, the variable `bathrooms_text`, which is stored as a textual description (e.g., "1 bath", "2 baths"), was converted into a numeric variable representing the number of bathrooms.
+
+Price was converted into log(price) as higher prices could get extremely huge.  
+
+After preprocessing, the cleaned dataset was exported into a space-delimited text file (`airbnb.txt`) and a corresponding descriptor file (`airbnb.dsc`). These files were then used as input for GUIDE to construct a regression tree predicting listing price.
+
+## Creating the GUIDE Input Files
+
+To run the regression tree in GUIDE, the cleaned dataset must be exported into two files:
+
+- `airbnb.txt` : the dataset used by GUIDE  
+- `airbnb.dsc` : a descriptor file defining the variables and their types  
+
+The `.txt` file was created by exporting the cleaned DataFrame as a space-delimited file. Missing values were replaced with `"NA"` to match the missing-value indicator expected by GUIDE.
+
+```python
+# Replace missing values with GUIDE missing indicator
+setup_df = clean_df.fillna("NA")
+
+# Export dataset for GUIDE
+setup_df.to_csv(
+    "airbnb.txt",
+    sep=" ",
+    index=False,
+    header=True
+)
+```
+
+The descriptor file (`.dsc`) was then generated automatically to ensure that the variable names and types matched the dataset exactly. GUIDE requires each variable to be labeled according to its role:
+
+- `d` = dependent variable (target variable)  
+- `n` = numeric predictor  
+- `b` = categorical predictor  
+
+The following Python code was used to assign the appropriate variable types and write the descriptor file:
+
+```python
+dsc_filename = "airbnb.dsc"
+data_filename = "airbnb.txt"
+
+lines = []
+target_column = "price"
+
+for i, col in enumerate(clean_df.columns, start=1):
+
+    if col == target_column:
+        var_type = "d"     # dependent variable
+
+    elif pd.api.types.is_numeric_dtype(clean_df[col]):
+        var_type = "n"     # numeric variable
+
+    else:
+        var_type = "b"     # categorical variable
+
+    lines.append(f"{i} {col} {var_type}")
+
+with open(dsc_filename, "w") as f:
+    f.write(f"{data_filename}\n")
+    f.write("NA\n")
+    f.write("2\n")
+    for line in lines:
+        f.write(line + "\n")
+```
+
+This script ensures that the `.dsc` file accurately reflects the structure of the cleaned dataset, allowing GUIDE to correctly interpret the predictors and response variable when constructing the regression tree.
+
+---
+
+# Running GUIDE
+
+### Settings
+
+The regression tree was constructed using GUIDE v4.6.1, which implements the Generalized, Unbiased Interaction Detection and Estimation algorithm for building regression and classification trees.
+
+The cleaned dataset (`airbnb.txt`) and descriptor file (`airbnb.dsc`) were loaded into GUIDE. The variable **price** was specified as the dependent variable, while all remaining variables were treated as predictors.
+
+A **least-squares regression tree** was used, meaning that splits were chosen to minimize the sum of squared errors within each node. GUIDE automatically handles missing values by imputing missing regressors and including missing-value indicators during the tree construction process.
+
+Default GUIDE settings were used for node splitting and pruning. The algorithm recursively partitions the dataset into subsets that are increasingly homogeneous with respect to the response variable (price).
+
+
+### Results
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics("cropped_tree.png")
+```
+
+**Figure notes**
+<div style="column-count: 3; column-gap: 40px;">
+
+- V1 = review_scores_rating  
+- V2 = host_acceptance_rate  
+- V3 = host_acceptance_rate  
+- V4 = host_acceptance_rate  
+- V5 = minimum_nights  
+- V6 = host_acceptance_rate  
+- V7 = host_response_rate  
+- V8 = host_acceptance_rate  
+- V9 = accommodates  
+- V10 = minimum_nights  
+- V11 = instant_bookable  
+- V12 = minimum_nights  
+- V13 = accommodates  
+- V14 = accommodates  
+- V15 = accommodates  
+- V16 = host_acceptance_rate  
+- V17 = host_acceptance_rate  
+- V18 = minimum_nights  
+- V19 = host_acceptance_rate  
+- V20 = host_acceptance_rate  
+- V21 = host_acceptance_rate  
+- V22 = number_of_reviews  
+- V23 = reviews_per_month  
+- V24 = minimum_nights  
+- V25 = host_acceptance_rate  
+- V26 = minimum_nights  
+- V27 = host_acceptance_rate  
+- V28 = reviews_per_month  
+- V29 = bathrooms  
+- V30 = maximum_nights  
+- V31 = review_scores_rating  
+- V32 = bathrooms  
+- V33 = reviews_per_month  
+- V34 = review_scores_rating  
+- V35 = number_of_reviews  
+- V36 = minimum_nights  
+- V37 = review_scores_rating  
+- V38 = minimum_nights  
+- V39 = maximum_nights  
+- V40 = accommodates  
+- V41 = review_scores_rating  
+- V42 = maximum_nights  
+- V43 = bathrooms  
+- V44 = maximum_nights  
+- V45 = number_of_reviews  
+</div>
+Additional notes:
+- Splits at nodes drawn with **gray circles** are not statistically significant.  
+- Splits at nodes drawn with **brown circles** represent interaction splits.  
+- Sample size (in italics) and mean price are printed below nodes.  
+- Terminal nodes with means **above 4.76 at the root node are colored yellow**, and those **below are colored purple**.  
+- The second-best split variable at the root node is **accommodates**.
+
+
+Your **Figure Notes** section can stay exactly the same.
+
+# Interpretation
+
+### Root Split
+
+The regression tree identifies **`review_scores_rating`** as the first split, indicating that it explains the largest initial variation in listing price. This variable appears at the **root node**, meaning it explains the largest variation in price within the dataset.
+
+Listings with **lower review scores** follow the left branch of the tree, while listings with **higher review scores** follow the right branch. This suggests that listings with stronger guest ratings tend to have higher predicted prices.
+
+### Other Important Predictors
+
+Several additional variables appear frequently throughout the tree and help refine price predictions:
+
+- **host_acceptance_rate:** reflects host responsiveness and booking behavior  
+- **accommodates:** captures the capacity of the listing  
+- **minimum_nights:** distinguishes between short-term and longer required stays  
+- **number_of_reviews:** indicates listing popularity and user engagement  
+
+For example, splits on accommodates show that listings that can host more guests tend to have higher predicted prices. Similarly, minimum_nights separates listings designed for short stays from those requiring longer bookings.
+
+### Terminal Node Interpretation
+
+The terminal nodes of the tree are colored based on whether their predicted mean price is above or below the **overall mean price at the root node (4.76)**.
+
+- **Yellow nodes** represent groups of listings with predicted prices above the overall average.
+- **Purple nodes** represent groups of listings with predicted prices below the overall average.
+
+This color scheme helps visually identify which combinations of listing characteristics correspond to relatively higher or lower predicted prices.
+
+### Summary
+
+Overall, the regression tree suggests that Airbnb prices are influenced by a combination of guest ratings, host behavior, listing capacity, and booking policies.
+
+# Corroborating with Python
+
+To verify the results obtained from the GUIDE regression tree, additional models were trained using Python’s scikit-learn library. Specifically, a decision tree regressor and a random forest regressor were fit using the same set of variables used in the GUIDE analysis.
+
+Before fitting the models, the dataset was cleaned by converting categorical boolean variables to numeric values and removing rows containing missing values. The response variable was the log-transformed listing price.
+
+The dataset was split into training and testing sets using an 80/20 split. A decision tree regressor with a maximum depth of four was trained first. A random forest model with 500 trees was then trained to obtain more stable estimates of variable importance.
+
+### Decision Tree
+
+```Python
+X = df.drop(columns=["price"])
+y = df["price"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+tree = DecisionTreeRegressor(max_depth=4, random_state=42)
+tree.fit(X_train, y_train)
+print("Decision Tree R2:", tree.score(X_test, y_test))
+```
+
+**Result:** Decision Tree R2: 0.5300244640603387
+
+### Random Forest
+```Python
+rf = RandomForestRegressor(n_estimators=500, random_state=42)
+rf.fit(X_train, y_train)
+print("Random Forest R2:", rf.score(X_test, y_test))
+```
+
+**Result:** Random Forest R2: 0.6466300878642877
+
+### Importance calculation
+```Python
+importance = pd.Series(rf.feature_importances_, index=X.columns)
+importance.sort_values(ascending=False)
+```
+**Result:**
+
+<div style="width:40%;">
+| Variable | Importance |
+|----------|-----------|
+| **accommodates** | **0.421** |
+| **bathrooms** | **0.153** |
+| **reviews_per_month** | **0.103** |
+| **review_scores_rating** | **0.074** |
+| number_of_reviews | 0.059 |
+| host_acceptance_rate | 0.056 |
+| maximum_nights | 0.041 |
+| minimum_nights | 0.031 |
+| host_response_rate | 0.023 |
+| beds | 0.021 |
+| host_is_superhost | 0.009 |
+| instant_bookable | 0.009 |
+| has_availability | 0.000 |
+
+</div>
+
+# Comparison of GUIDE and Random Forest Results
+
+To further validate the results obtained from the GUIDE regression tree, a random forest model was trained in Python using the same set of variables. The feature importance values from the random forest provide a useful way to compare which predictors were most influential in determining Airbnb prices.
+
+Several variables that appeared frequently in the GUIDE tree also appear among the most important predictors in the random forest model. In particular, **accommodates**, **number_of_reviews**, **host_acceptance_rate**, and **minimum_nights** are identified as meaningful contributors in both approaches. Among these, **accommodates** is by far the most influential variable in the random forest model, accounting for the largest share of predictive importance. This suggests that listing capacity is a primary determinant of price.
+
+The random forest model also highlights **review_scores_rating** and **bathrooms** as important predictors, which aligns with patterns observed in the GUIDE tree where review-related metrics and property characteristics were used repeatedly in splitting rules. Variables related to listing popularity and host behavior, such as **number_of_reviews** and **host_acceptance_rate**, also contribute to price prediction.
+
+Overall, the overlap between the GUIDE regression tree and the random forest feature importance rankings provides strong evidence that several predictors—particularly **accommodates**, **number_of_reviews**, **host_acceptance_rate**, and **minimum_nights** play an important role in determining Airbnb prices in this dataset. The fact that these variables appear in both modeling approaches suggests that their influence on price is robust and not dependent on a particular algorithm. Additional predictors identified by the random forest, such as **bathrooms** and **review_scores_rating**, further reinforce the importance of listing characteristics and review-related information in explaining price variation.

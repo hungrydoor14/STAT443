@@ -14,7 +14,7 @@
  National Science Foundation, National Institutes of Health,
  Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
   
- This job was started on 02/24/26 at 11:43
+ This job was started on 02/24/26 at 11:36
   
  Least squares regression tree
  Predictions truncated at global min. and max. of D sample values
@@ -1908,4 +1908,4 @@ Node 31: Terminal node
  
  Observed and fitted values are stored in fit.txt
  LaTeX code for tree is in tree.tex
- Elapsed time in seconds: 2.0352
+ Elapsed time in seconds: 1.9615

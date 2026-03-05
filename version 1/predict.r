@@ -1,5 +1,5 @@
 ## Function for predicting least-squares mean of price
-## Code produced by GUIDE 46.1 on 2/24/26 at 11:43
+## Code produced by GUIDE 46.1 on 2/24/26 at 11:36
 guide_predict <- function(){
  if(is.na(review_scores_rating) | review_scores_rating <= 4.15500000000 ){
    if(is.na(host_acceptance_rate) | host_acceptance_rate <= 0.995000000000 ){
