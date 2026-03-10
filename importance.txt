@@ -1,0 +1,14 @@
+    Rank Group    Score       Missing     Variable
+       1  A     1.066E+02           0     accommodates
+       2  A     6.816E+01          48     beds
+       3  A     6.472E+01          11     bathrooms
+       4  A     2.453E+01        1041     review_scores_rating
+       5  A     1.635E+01           0     maximum_nights
+       6  A     1.578E+01        1042     reviews_per_month
+       7  A     1.012E+01           0     number_of_reviews
+       8  A     6.899E+00           0     minimum_nights
+       9  A     6.252E+00         291     host_acceptance_rate
+      10  A     4.243E+00         418     host_response_rate
+      11  A     3.819E+00          23     host_is_superhost
+      12  A     2.224E+00           0     instant_bookable
+      13  A     1.470E+00           0     has_availability

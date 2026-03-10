@@ -1,0 +1,284 @@
+ \documentclass{article}
+ % LaTeX file created by GUIDE version 46.1 on 02/24/26 at 11:43
+ %%%% Usage: latex tree.tex, dvips tree.tex, ps2pdf tree.tex
+ %%%% or: xelatex tree.tex
+ \usepackage{pstricks}
+ %%%% If using pdflatex, replace above line with \usepackage[pdf]{pstricks}
+ %%%% and use: pdflatex -shell-escape tree.tex
+ \usepackage{pstricks,pst-node,pst-tree}
+ \usepackage[a1paper,landscape,left=0.25in,right=0.25in,top=0.75in,bottom=0.75in]{geometry}
+ \usepackage[dvipsnames]{xcolor}
+ \usepackage{lscape}
+ \definecolor{wheat}{rgb}{0.96, 0.87, 0.7}
+ \definecolor{lightgray}{rgb}{0.9, 0.9, 0.9}
+ \definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+ \definecolor{mauve}{rgb}{0.88, 0.69, 1.0}
+ \definecolor{skyblue}{RGB}{86,180,233}
+ \definecolor{vermillion}{RGB}{213,94,0}
+ \definecolor{purple}{RGB}{204,121,167}
+ \definecolor{bluishgreen}{RGB}{0,158,115}
+ \pagestyle{empty}
+ \begin{document}
+ \begin{landscape}
+ \begin{center} \footnotesize
+\psset{linecolor=black,tnsep=1pt,tndepth=0cm,tnheight=0cm,treesep=.2cm,levelsep=40pt,radius=5pt,fillstyle=solid}
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V1}}\\$\leq_*$\texttt{4.15}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V2}}\\$\leq_*$\texttt{0.9950}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V3}}\\$\leq_*$\texttt{0.9850}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V4}}\\$\leq_*$\texttt{0.9750}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=brown]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{beds}}\\$\leq_*$\texttt{1.50}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V5}}\\$\leq$\texttt{6.50}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{62}\\4.41}}  
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V6}}\\$\leq_*$\texttt{0.9650}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V7}}\\$\leq_*$\texttt{0.9700}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{127}\\4.31}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{130}\\4.49}}  
+   }
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{227}\\4.86}}  
+   }
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{beds}}\\$\leq$\texttt{4.50}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V8}}\\$\leq_*$\texttt{0.9650}}}
+ }{
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{198}\\5.05}}  
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{97}\\5.55}}  
+   }
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{28}\\5.83}}  
+   }
+   }
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{51}\\4.61}}  
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V9}}\\$\leq$\texttt{4.50}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V10}}\\$\leq$\texttt{5.50}}}
+ }{
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{31}\\4.85}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{29}\\4.46}}  
+   }
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{38}\\5.23}}  
+   }
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V11}}\\=\texttt{\detokenize{f}}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{beds}}\\$\leq_*$\texttt{1.50}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{44}\\4.36}}  
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{41}\\4.97}}  
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V12}}\\$\leq$\texttt{9}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V13}}\\$\leq$\texttt{3.50}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{40}\\4.16}}  
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{39}\\5.05}}  
+   }
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{50}\\4.46}}  
+   }
+   }
+   }
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V14}}\\$\leq$\texttt{3.50}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V15}}\\$\leq$\texttt{1.50}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V16}}\\$\leq_*$\texttt{0.7150}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{38}\\4.01}}  
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V17}}\\$\leq$\texttt{0.9750}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{65}\\3.79}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{116}\\3.72}}  
+   }
+   }
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V18}}\\$\leq$\texttt{1.50}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V19}}\\$\leq_*$\texttt{0.9350}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{130}\\4.21}}  
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V20}}\\$\leq$\texttt{0.9750}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{28}\\4.49}}  
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V21}}\\$\leq$\texttt{0.9850}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{32}\\4.28}}  
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V22}}\\$\leq$\texttt{5.50}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{27}\\4.07}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{196}\\4.24}}  
+   }
+   }
+   }
+   }
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V23}}\\$\leq$\texttt{0.6200}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V24}}\\$\leq$\texttt{12.50}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V25}}\\$\leq$\texttt{0.9750}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{29}\\4.42}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{36}\\4.40}}  
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V26}}\\$\leq$\texttt{32.50}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V27}}\\$\leq$\texttt{0.8650}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{92}\\4.36}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{191}\\4.50}}  
+   }
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{27}\\4.75}}  
+   }
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V28}}\\$\leq$\texttt{2.40}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V29}}\\$\leq$\texttt{1.25}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{232}\\4.37}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{67}\\4.12}}  
+   }
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V30}}\\$\leq$\texttt{30.50}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{55}\\4.09}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{158}\\4.46}}  
+   }
+   }
+   }
+   }
+   }
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V31}}\\$\leq$\texttt{4.96}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V32}}\\$\leq_*$\texttt{2.25}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V33}}\\$\leq$\texttt{2.16}}}
+ }{
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V34}}\\$\leq$\texttt{4.78}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V35}}\\$\leq$\texttt{34}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V36}}\\$\leq$\texttt{31}}}
+ }{
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{171}\\4.97}}  
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{50}\\4.87}}  
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V37}}\\$\leq$\texttt{4.61}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{36}\\4.66}}  
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{58}\\4.94}}  
+   }
+   }
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{400}\\5.08}}  
+   }
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V38}}\\$\leq$\texttt{1.50}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V39}}\\$\leq$\texttt{30.50}}}
+ }{
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{26}\\4.79}}  
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{187}\\4.51}}  
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V40}}\\$\leq$\texttt{4.50}}}
+ }{
+    \TC[fillcolor=purple]~{\shortstack[c]{\emph{174}\\4.57}}  
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{338}\\5.02}}  
+   }
+   }
+   }
+  \pstree[treemode=D]{\TC~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V41}}\\$\leq$\texttt{4.91}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V42}}\\$\leq$\texttt{270}}}
+ }{
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{34}\\5.49}}  
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{104}\\5.81}}  
+   }
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{55}\\5.97}}  
+   }
+   }
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V43}}\\$\leq$\texttt{3.25}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V44}}\\$\leq$\texttt{1062}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{beds}}\\$\leq_*$\texttt{4.50}}}
+ }{
+  \pstree[treemode=D]{\TC[linecolor=gray]~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{V45}}\\$\leq$\texttt{5.50}}}
+ }{
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{159}\\5.00}}  
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{192}\\5.11}}  
+   }
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{48}\\5.73}}  
+   }
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{170}\\5.21}}  
+   }
+    \TC[fillcolor=yellow]~{\shortstack[c]{\emph{47}\\6.52}}  
+ }
+ }
+ }
+ }
+ \end{center}
+GUIDE v.46.1 0.250-SE
+least-squares multiple linear regression tree
+ (missing regressor values imputed and missing indicators added)
+for predicting \texttt{\detokenize{price}}.
+ % Tree constructed from 5000 observations
+ % and pruned from a tree with 78 terminal nodes.
+ % Maximum number of split levels is 8 and minimum node sample size is 26.
+At each split, an observation goes to the left branch 
+ if and only if the condition is satisfied.
+ Symbol `$\leq_*$' stands for `$\leq$ or missing'.
+\texttt{\detokenize{V1}} = \texttt{\detokenize{review_scores_rating}}.
+\texttt{\detokenize{V2}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V3}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V4}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V5}} = \texttt{\detokenize{minimum_nights}}.
+\texttt{\detokenize{V6}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V7}} = \texttt{\detokenize{host_response_rate}}.
+\texttt{\detokenize{V8}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V9}} = \texttt{\detokenize{accommodates}}.
+\texttt{\detokenize{V10}} = \texttt{\detokenize{minimum_nights}}.
+\texttt{\detokenize{V11}} = \texttt{\detokenize{instant_bookable}}.
+\texttt{\detokenize{V12}} = \texttt{\detokenize{minimum_nights}}.
+\texttt{\detokenize{V13}} = \texttt{\detokenize{accommodates}}.
+\texttt{\detokenize{V14}} = \texttt{\detokenize{accommodates}}.
+\texttt{\detokenize{V15}} = \texttt{\detokenize{accommodates}}.
+\texttt{\detokenize{V16}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V17}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V18}} = \texttt{\detokenize{minimum_nights}}.
+\texttt{\detokenize{V19}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V20}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V21}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V22}} = \texttt{\detokenize{number_of_reviews}}.
+\texttt{\detokenize{V23}} = \texttt{\detokenize{reviews_per_month}}.
+\texttt{\detokenize{V24}} = \texttt{\detokenize{minimum_nights}}.
+\texttt{\detokenize{V25}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V26}} = \texttt{\detokenize{minimum_nights}}.
+\texttt{\detokenize{V27}} = \texttt{\detokenize{host_acceptance_rate}}.
+\texttt{\detokenize{V28}} = \texttt{\detokenize{reviews_per_month}}.
+\texttt{\detokenize{V29}} = \texttt{\detokenize{bathrooms}}.
+\texttt{\detokenize{V30}} = \texttt{\detokenize{maximum_nights}}.
+\texttt{\detokenize{V31}} = \texttt{\detokenize{review_scores_rating}}.
+\texttt{\detokenize{V32}} = \texttt{\detokenize{bathrooms}}.
+\texttt{\detokenize{V33}} = \texttt{\detokenize{reviews_per_month}}.
+\texttt{\detokenize{V34}} = \texttt{\detokenize{review_scores_rating}}.
+\texttt{\detokenize{V35}} = \texttt{\detokenize{number_of_reviews}}.
+\texttt{\detokenize{V36}} = \texttt{\detokenize{minimum_nights}}.
+\texttt{\detokenize{V37}} = \texttt{\detokenize{review_scores_rating}}.
+\texttt{\detokenize{V38}} = \texttt{\detokenize{minimum_nights}}.
+\texttt{\detokenize{V39}} = \texttt{\detokenize{maximum_nights}}.
+\texttt{\detokenize{V40}} = \texttt{\detokenize{accommodates}}.
+\texttt{\detokenize{V41}} = \texttt{\detokenize{review_scores_rating}}.
+\texttt{\detokenize{V42}} = \texttt{\detokenize{maximum_nights}}.
+\texttt{\detokenize{V43}} = \texttt{\detokenize{bathrooms}}.
+\texttt{\detokenize{V44}} = \texttt{\detokenize{maximum_nights}}.
+\texttt{\detokenize{V45}} = \texttt{\detokenize{number_of_reviews}}.
+ Splits at nodes drawn with \textbf{\textcolor{gray}{gray}} circles are not statistically significant.
+ Splits at nodes drawn with \textbf{\textcolor{brown}{brown}} circles are interaction splits.
+Sample size (in \emph{italics}) and mean of \texttt{\detokenize{price}} printed below nodes.
+ Terminal nodes with means above and below value of  4.76 at root node are painted \colorbox{yellow}{yellow} and \colorbox{purple}{purple} respectively.
+ Second best split variable at root node is \texttt{\detokenize{accommodates}}.
+ \end{landscape}
+ \end{document}

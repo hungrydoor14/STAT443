@@ -1,0 +1,2928 @@
+             GGG   U   U  I  DDDD   EEEE
+            G   G  U   U  I  D   D  E
+            G      U   U  I  D   D  E
+            G  GG  U   U  I  D   D  EEE
+            G   G  U   U  I  D   D  E
+            G   G  U   U  I  D   D  E
+             GGG    UUU   I  DDDD   EEEE
+   
+ GUIDE Classification and Regression Trees and Forests
+ Version 46.1 (Build date: January 23, 2026)       
+ Compiled with NAG Fortran 7.2 on macOS Sequoia 15.6.1 for Apple ARM processors  
+ Copyright (c) 1997-2023 Wei-Yin Loh. All rights reserved.
+ This software is based upon work partially supported by the U.S. Army Research Office,
+ National Science Foundation, National Institutes of Health,
+ Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
+  
+ This job was started on 03/09/26 at 22:23
+  
+ Least squares regression tree
+ No pruning
+ DSC file: airbnb.dsc
+ Training sample file: airbnb.txt
+ Missing value code: NA
+ Records in data file start on line 2
+ 10 N variables changed to S
+ Warning: B variables changed to C
+ D variable is price
+ Piecewise constant model
+ Number of records in data file: 5000
+ Length of longest entry in data file: 18
+ Missing values found among categorical variables
+ Separate categories will be created for missing categorical variables
+ Missing values found among non-categorical variables
+  
+ Numbers of N, F, S, and P below exclude constant variables
+      Total  #cases w/   #missing
+     #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
+       5000          0       1348        0        0        0       10
+     #P-var   #M-var   #B-var   #C-var   #I-var
+          0        0        0        3        0
+ No weight variable in data file
+ Number of cases used for training: 5000
+ Number of cases excluded due to 0 W or missing D variable: 0
+  
+ Importance scoring of variables
+ Nodewise interaction tests on all variables
+ Split values for N and S variables based on exhaustive search
+ Max number of interaction splits: 100
+ Maximum number of split levels: 8
+ Minimum node sample size: 5
+ Using 100 permutations to standardize means of importance scores
+ Finished permutations to standardize means of importance scores
+  
+ Structure of final tree. Each terminal node is marked with a T.
+  
+ D-mean is mean of price in the node
+ Cases fit give the number of cases used to fit node
+ MSE is residual sum of squares divided by number of cases in node
+        Node    Total    Cases Matrix    Node      Node      Split          Interacting
+        label   cases      fit  rank    D-mean     MSE       variable       variable
+           1     5000     5000     1  4.757E+00  5.903E-01   accommodates 
+           2     3283     3283     1  4.477E+00  3.986E-01   accommodates 
+           4     1916     1916     1  4.289E+00  3.730E-01   accommodates 
+           8      305      305     1  3.806E+00  2.257E-01   instant_bookable 
+          16       74       74     1  3.626E+00  1.450E-01   beds 
+          32       67       67     1  3.604E+00  1.483E-01   host_acceptance_rate 
+          64T       8        8     1  3.890E+00  3.645E-01   - 
+          65       59       59     1  3.565E+00  1.119E-01   review_scores_rating 
+         130T      28       28     1  3.442E+00  8.414E-02   - 
+         131       31       31     1  3.676E+00  1.137E-01   number_of_reviews 
+         262T      24       24     1  3.614E+00  1.083E-01   bathrooms 
+         263T       7        7     1  3.890E+00  8.448E-02   - 
+          33T       7        7     1  3.840E+00  7.404E-02   - 
+          17      231      231     1  3.864E+00  2.384E-01   maximum_nights 
+          34      163      163     1  3.802E+00  1.685E-01   host_acceptance_rate 
+          68T     100      100     1  3.740E+00  1.846E-01   - 
+          69       63       63     1  3.900E+00  1.297E-01   bathrooms 
+         138T      17       17     1  3.707E+00  1.583E-02   - 
+         139       46       46     1  3.972E+00  1.537E-01   bathrooms 
+         278T      33       33     1  3.911E+00  1.593E-01   - 
+         279T      13       13     1  4.125E+00  1.160E-01   maximum_nights 
+          35       68       68     1  4.013E+00  3.792E-01   number_of_reviews 
+          70       31       31     1  4.302E+00  5.593E-01   host_is_superhost 
+         140       20       20     1  4.190E+00  7.850E-01   host_response_rate 
+         280T      11       11     1  4.380E+00  1.116E+00   - 
+         281T       9        9     1  3.959E+00  3.601E-01   - 
+         141       11       11     1  4.505E+00  1.162E-01   host_acceptance_rate 
+         282T       6        6     1  4.616E+00  4.461E-02   - 
+         283T       5        5     1  4.371E+00  1.938E-01   - 
+          71       37       37     1  3.771E+00  1.075E-01   host_acceptance_rate 
+         142       28       28     1  3.705E+00  1.008E-01   host_acceptance_rate 
+         284T      13       13     1  3.840E+00  7.358E-02   review_scores_rating 
+         285T      15       15     1  3.589E+00  1.000E-01   host_acceptance_rate 
+         143T       9        9     1  3.974E+00  8.195E-02   - 
+           9     1611     1611     1  4.380E+00  3.486E-01   reviews_per_month 
+          18      697      697     1  4.582E+00  3.777E-01   maximum_nights 
+          36      297      297     1  4.347E+00  4.953E-01   maximum_nights 
+          72      265      265     1  4.429E+00  4.808E-01   host_response_rate 
+         144       69       69     1  4.811E+00  3.865E-01   minimum_nights 
+         288T      10       10     1  5.035E+00  4.427E-01   - 
+         289T      59       59     1  4.773E+00  3.744E-01   maximum_nights 
+         145      196      196     1  4.294E+00  4.462E-01   bathrooms 
+         290T     172      172     1  4.355E+00  4.426E-01   host_response_rate 
+         291T      24       24     1  3.858E+00  2.664E-01   number_of_reviews 
+          73       32       32     1  3.668E+00  1.019E-01   instant_bookable 
+         146T       6        6     1  3.308E+00  1.585E-02   - 
+         147T      26       26     1  3.752E+00  8.482E-02   - 
+          37      400      400     1  4.757E+00  2.198E-01   minimum_nights :host_acceptance_rate
+          74      383      383     1  4.754E+00  2.149E-01   host_acceptance_rate 
+         148       21       21     1  4.044E+00  3.793E-01   host_response_rate 
+         296T      16       16     1  3.723E+00  3.390E-02   - 
+         297T       5        5     1  5.073E+00  3.530E-02   - 
+         149      362      362     1  4.795E+00  1.754E-01   beds 
+         298T     353      353     1  4.804E+00  1.750E-01   bathrooms 
+         299T       9        9     1  4.451E+00  7.772E-02   - 
+          75       17       17     1  4.811E+00  3.470E-01   bathrooms 
+         150       12       12     1  5.043E+00  3.219E-02   host_is_superhost 
+         300T       6        6     1  4.979E+00  5.994E-02   - 
+         301T       6        6     1  5.108E+00  9.777E-04   - 
+         151T       5        5     1  4.253E+00  7.486E-01   - 
+          19      914      914     1  4.227E+00  2.721E-01   review_scores_rating 
+          38      595      595     1  4.140E+00  2.378E-01   bathrooms 
+          76      532      532     1  4.178E+00  2.311E-01   beds 
+         152      495      495     1  4.167E+00  2.281E-01   host_is_superhost :reviews_per_month
+         304T     273      273     1  4.156E+00  2.736E-01   review_scores_rating 
+         305T     222      222     1  4.180E+00  1.727E-01   host_acceptance_rate 
+         153       37       37     1  4.338E+00  2.514E-01   reviews_per_month 
+         306T      23       23     1  4.131E+00  2.555E-01   host_is_superhost 
+         307T      14       14     1  4.677E+00  6.409E-02   host_response_rate 
+          77T      63       63     1  3.812E+00  1.775E-01   - 
+          39      319      319     1  4.389E+00  2.963E-01   minimum_nights 
+          78       92       92     1  4.269E+00  2.439E-01   maximum_nights 
+         156T       9        9     1  4.629E+00  2.833E-01   - 
+         157       83       83     1  4.229E+00  2.273E-01   host_is_superhost :host_acceptance_rate
+         314T      50       50     1  4.224E+00  1.478E-01   host_acceptance_rate 
+         315T      33       33     1  4.238E+00  3.561E-01   number_of_reviews 
+          79      227      227     1  4.438E+00  3.104E-01   maximum_nights 
+         158      151      151     1  4.344E+00  3.184E-01   minimum_nights 
+         316T      92       92     1  4.408E+00  2.766E-01   minimum_nights 
+         317T      59       59     1  4.243E+00  3.725E-01   host_response_rate 
+         159       76       76     1  4.626E+00  2.451E-01   host_acceptance_rate 
+         318T       5        5     1  5.147E+00  1.823E-01   - 
+         319T      71       71     1  4.589E+00  2.315E-01   host_acceptance_rate 
+           5     1367     1367     1  4.739E+00  3.164E-01   reviews_per_month 
+          10      811      811     1  4.883E+00  3.361E-01   bathrooms 
+          20      574      574     1  4.801E+00  3.274E-01   review_scores_rating 
+          40      168      168     1  4.660E+00  3.498E-01   minimum_nights 
+          80       96       96     1  4.808E+00  3.576E-01   maximum_nights 
+         160       69       69     1  4.761E+00  3.632E-01   maximum_nights 
+         320T      23       23     1  4.931E+00  4.098E-01   maximum_nights 
+         321T      46       46     1  4.676E+00  3.262E-01   number_of_reviews 
+         161       27       27     1  4.928E+00  3.361E-01   minimum_nights 
+         322T       9        9     1  5.204E+00  7.409E-01   - 
+         323T      18       18     1  4.789E+00  1.047E-01   host_response_rate 
+          81       72       72     1  4.463E+00  2.754E-01   review_scores_rating 
+         162       55       55     1  4.511E+00  2.260E-01   review_scores_rating 
+         324T      35       35     1  4.404E+00  1.849E-01   review_scores_rating 
+         325T      20       20     1  4.698E+00  2.532E-01   reviews_per_month 
+         163       17       17     1  4.309E+00  4.266E-01   review_scores_rating 
+         326T       6        6     1  4.132E+00  6.647E-01   - 
+         327T      11       11     1  4.406E+00  3.212E-01   number_of_reviews 
+          41      406      406     1  4.859E+00  3.073E-01   host_is_superhost :maximum_nights
+          82      243      243     1  4.886E+00  3.104E-01   maximum_nights 
+         164      170      170     1  4.772E+00  2.658E-01   instant_bookable 
+         328T     109      109     1  4.748E+00  2.839E-01   review_scores_rating 
+         329T      61       61     1  4.816E+00  2.347E-01   minimum_nights :host_response_rate
+         165       73       73     1  5.151E+00  3.174E-01   instant_bookable 
+         330T      54       54     1  5.044E+00  1.934E-01   accommodates 
+         331T      19       19     1  5.457E+00  5.667E-01   - 
+          83      163      163     1  4.819E+00  3.018E-01   minimum_nights 
+         166       34       34     1  5.003E+00  3.896E-01   accommodates 
+         332T       9        9     1  4.754E+00  7.817E-01   - 
+         333T      25       25     1  5.093E+00  2.434E-01   review_scores_rating 
+         167      129      129     1  4.771E+00  2.702E-01   minimum_nights 
+         334T     122      122     1  4.755E+00  2.812E-01   reviews_per_month 
+         335T       7        7     1  5.037E+00  6.266E-03   - 
+          21      237      237     1  5.083E+00  3.025E-01   accommodates 
+          42       20       20     1  4.453E+00  2.979E-01   maximum_nights 
+          84T       8        8     1  4.191E+00  2.049E-01   - 
+          85       12       12     1  4.628E+00  3.009E-01   number_of_reviews 
+         170T       7        7     1  4.732E+00  4.015E-01   - 
+         171T       5        5     1  4.482E+00  1.794E-01   - 
+          43      217      217     1  5.141E+00  2.641E-01   beds 
+          86      186      186     1  5.169E+00  2.062E-01   reviews_per_month 
+         172      102      102     1  5.221E+00  1.445E-01   host_acceptance_rate 
+         344T      36       36     1  5.330E+00  7.644E-02   instant_bookable 
+         345T      66       66     1  5.162E+00  1.733E-01   number_of_reviews 
+         173       84       84     1  5.105E+00  2.763E-01   minimum_nights 
+         346T      42       42     1  5.216E+00  2.266E-01   maximum_nights 
+         347T      42       42     1  4.994E+00  3.075E-01   host_acceptance_rate 
+          87       31       31     1  4.974E+00  5.966E-01   review_scores_rating 
+         174T       7        7     1  4.203E+00  4.833E-01   - 
+         175       24       24     1  5.199E+00  4.185E-01   minimum_nights 
+         350T       7        7     1  5.646E+00  3.477E-01   - 
+         351T      17       17     1  5.014E+00  3.475E-01   host_response_rate 
+          11      556      556     1  4.529E+00  2.138E-01   review_scores_rating 
+          22      357      357     1  4.416E+00  2.251E-01   maximum_nights 
+          44      268      268     1  4.345E+00  2.358E-01   minimum_nights 
+          88      232      232     1  4.311E+00  2.356E-01   minimum_nights 
+         176      104      104     1  4.261E+00  1.522E-01   host_acceptance_rate 
+         352T      28       28     1  4.015E+00  2.467E-02   maximum_nights 
+         353T      76       76     1  4.352E+00  1.691E-01   number_of_reviews 
+         177      128      128     1  4.351E+00  3.015E-01   beds 
+         354T      36       36     1  3.844E+00  4.512E-01   maximum_nights 
+         355T      92       92     1  4.550E+00  1.057E-01   review_scores_rating 
+          89       36       36     1  4.563E+00  1.874E-01   minimum_nights 
+         178       25       25     1  4.731E+00  1.271E-01   reviews_per_month 
+         356T      19       19     1  4.819E+00  1.254E-01   maximum_nights 
+         357T       6        6     1  4.454E+00  3.698E-02   - 
+         179       11       11     1  4.182E+00  1.205E-01   number_of_reviews 
+         358T       6        6     1  4.267E+00  1.810E-01   - 
+         359T       5        5     1  4.080E+00  5.129E-02   - 
+          45       89       89     1  4.630E+00  1.332E-01   reviews_per_month 
+          90       20       20     1  4.870E+00  9.774E-02   number_of_reviews 
+         180       13       13     1  4.809E+00  8.770E-02   review_scores_rating 
+         360T       5        5     1  4.678E+00  7.239E-02   - 
+         361T       8        8     1  4.890E+00  8.918E-02   - 
+         181T       7        7     1  4.983E+00  1.112E-01   - 
+          91       69       69     1  4.560E+00  1.232E-01   minimum_nights 
+         182       63       63     1  4.587E+00  1.225E-01   host_is_superhost 
+         364T      43       43     1  4.486E+00  5.583E-02   beds 
+         365T      20       20     1  4.804E+00  2.037E-01   minimum_nights 
+         183T       6        6     1  4.285E+00  5.752E-02   - 
+          23      199      199     1  4.733E+00  1.297E-01   review_scores_rating 
+          46       73       73     1  4.661E+00  9.063E-02   reviews_per_month 
+          92T       6        6     1  4.957E+00  8.608E-02   - 
+          93       67       67     1  4.635E+00  8.369E-02   bathrooms 
+         186       60       60     1  4.615E+00  6.725E-02   number_of_reviews 
+         372T      35       35     1  4.664E+00  6.079E-02   beds 
+         373T      25       25     1  4.548E+00  7.107E-02   host_acceptance_rate 
+         187T       7        7     1  4.802E+00  2.229E-01   - 
+          47      126      126     1  4.774E+00  1.485E-01   accommodates 
+          94       26       26     1  4.595E+00  1.947E-01   review_scores_rating 
+         188       14       14     1  4.764E+00  6.170E-02   reviews_per_month 
+         376T       9        9     1  4.831E+00  7.065E-02   - 
+         377T       5        5     1  4.644E+00  3.101E-02   - 
+         189       12       12     1  4.399E+00  2.913E-01   host_is_superhost 
+         378T       6        6     1  4.161E+00  4.337E-01   - 
+         379T       6        6     1  4.637E+00  7.118E-02   - 
+          95      100      100     1  4.821E+00  1.277E-01   review_scores_rating 
+         190       33       33     1  4.749E+00  9.667E-02   host_acceptance_rate 
+         380T       7        7     1  4.935E+00  8.085E-02   - 
+         381T      26       26     1  4.698E+00  9.203E-02   maximum_nights 
+         191       67       67     1  4.856E+00  1.408E-01   host_is_superhost 
+         382T      19       19     1  4.732E+00  2.313E-01   maximum_nights 
+         383T      48       48     1  4.906E+00  1.004E-01   beds 
+           3     1717     1717     1  5.293E+00  5.195E-01   bathrooms 
+           6     1319     1319     1  5.071E+00  3.203E-01   bathrooms 
+          12      642      642     1  4.857E+00  2.679E-01   reviews_per_month 
+          24      284      284     1  4.984E+00  3.875E-01   reviews_per_month :review_scores_rating
+          48      140      140     1  4.945E+00  2.928E-01   minimum_nights 
+          96       47       47     1  5.161E+00  2.696E-01   minimum_nights 
+         192       21       21     1  5.235E+00  3.473E-01   host_acceptance_rate 
+         384T       7        7     1  5.484E+00  1.462E-01   - 
+         385T      14       14     1  5.110E+00  4.168E-01   review_scores_rating 
+         193       26       26     1  5.102E+00  2.100E-01   number_of_reviews 
+         386T      19       19     1  4.927E+00  1.199E-01   host_acceptance_rate 
+         387T       7        7     1  5.576E+00  1.557E-01   - 
+          97       93       93     1  4.836E+00  2.717E-01   reviews_per_month 
+         194       54       54     1  4.935E+00  2.443E-01   host_acceptance_rate 
+         388T      31       31     1  5.066E+00  3.277E-01   beds 
+         389T      23       23     1  4.759E+00  8.505E-02   host_is_superhost 
+         195       39       39     1  4.700E+00  2.843E-01   accommodates 
+         390T      13       13     1  4.534E+00  4.661E-01   number_of_reviews 
+         391T      26       26     1  4.783E+00  1.870E-01   beds 
+          49      144      144     1  5.021E+00  4.795E-01   host_response_rate 
+          98       18       18     1  5.576E+00  2.344E+00   minimum_nights 
+         196T       5        5     1  6.356E+00  8.629E+00   - 
+         197       13       13     1  5.277E+00  9.423E-02   reviews_per_month 
+         394T       8        8     1  5.404E+00  4.657E-02   - 
+         395T       5        5     1  5.072E+00  1.166E-01   - 
+          99      126      126     1  4.942E+00  1.790E-01   review_scores_rating :bathrooms
+         198       71       71     1  4.848E+00  1.875E-01   review_scores_rating 
+         396T      22       22     1  4.666E+00  1.544E-01   beds 
+         397T      49       49     1  4.929E+00  1.838E-01   host_is_superhost 
+         199       55       55     1  5.064E+00  1.446E-01   maximum_nights 
+         398T      20       20     1  5.208E+00  1.349E-01   review_scores_rating 
+         399T      35       35     1  4.981E+00  1.349E-01   reviews_per_month 
+          25      358      358     1  4.757E+00  1.510E-01   review_scores_rating 
+          50      189      189     1  4.645E+00  1.285E-01   host_is_superhost 
+         100T      97       97     1  4.590E+00  1.310E-01   - 
+         101       92       92     1  4.704E+00  1.206E-01   host_acceptance_rate :number_of_reviews
+         202       54       54     1  4.675E+00  1.301E-01   number_of_reviews :host_response_rate
+         404T      26       26     1  4.456E+00  9.958E-02   minimum_nights 
+         405T      28       28     1  4.878E+00  7.431E-02   reviews_per_month 
+         203       38       38     1  4.744E+00  1.074E-01   number_of_reviews 
+         406T      11       11     1  4.970E+00  9.894E-02   review_scores_rating 
+         407T      27       27     1  4.652E+00  8.426E-02   maximum_nights 
+          51      169      169     1  4.882E+00  1.475E-01   reviews_per_month 
+         102      136      136     1  4.917E+00  1.593E-01   beds 
+         204      100      100     1  4.872E+00  1.593E-01   number_of_reviews 
+         408T      10       10     1  4.636E+00  1.149E-01   host_acceptance_rate 
+         409T      90       90     1  4.898E+00  1.586E-01   host_is_superhost 
+         205       36       36     1  5.042E+00  1.419E-01   review_scores_rating 
+         410T       9        9     1  4.930E+00  9.501E-02   - 
+         411T      27       27     1  5.080E+00  1.560E-01   instant_bookable 
+         103       33       33     1  4.737E+00  7.554E-02   minimum_nights 
+         206       15       15     1  4.585E+00  5.361E-02   number_of_reviews 
+         412T       5        5     1  4.411E+00  4.213E-02   - 
+         413T      10       10     1  4.671E+00  3.953E-02   reviews_per_month 
+         207       18       18     1  4.863E+00  6.063E-02   number_of_reviews 
+         414T      12       12     1  4.784E+00  5.863E-02   number_of_reviews 
+         415T       6        6     1  5.023E+00  3.154E-02   - 
+          13      677      677     1  5.273E+00  2.862E-01   accommodates 
+          26      424      424     1  5.167E+00  2.367E-01   maximum_nights 
+          52      294      294     1  5.120E+00  2.550E-01   reviews_per_month 
+         104       94       94     1  5.272E+00  1.998E-01   host_acceptance_rate 
+         208       52       52     1  5.372E+00  2.010E-01   instant_bookable 
+         416T      33       33     1  5.302E+00  1.985E-01   maximum_nights 
+         417T      19       19     1  5.494E+00  1.920E-01   number_of_reviews 
+         209       42       42     1  5.148E+00  1.746E-01   maximum_nights 
+         418T      15       15     1  5.274E+00  1.599E-01   maximum_nights 
+         419T      27       27     1  5.078E+00  1.751E-01   number_of_reviews 
+         105      200      200     1  5.049E+00  2.661E-01   review_scores_rating 
+         210       79       79     1  4.886E+00  2.833E-01   minimum_nights 
+         420T      22       22     1  4.548E+00  3.093E-01   host_acceptance_rate 
+         421T      57       57     1  5.016E+00  2.166E-01   host_acceptance_rate 
+         211      121      121     1  5.156E+00  2.281E-01   instant_bookable 
+         422T      61       61     1  5.148E+00  1.113E-01   host_response_rate 
+         423T      60       60     1  5.163E+00  3.506E-01   host_acceptance_rate 
+          53      130      130     1  5.272E+00  1.810E-01   review_scores_rating 
+         106       15       15     1  5.013E+00  2.807E-01   host_response_rate 
+         212T       5        5     1  5.270E+00  1.020E-01   - 
+         213T      10       10     1  4.885E+00  3.366E-01   - 
+         107      115      115     1  5.306E+00  1.604E-01   bathrooms 
+         214       18       18     1  5.254E+00  8.997E-02   reviews_per_month 
+         428T       8        8     1  5.522E+00  4.296E-02   - 
+         429T      10       10     1  5.039E+00  2.161E-02   reviews_per_month 
+         215       97       97     1  5.315E+00  1.739E-01   host_acceptance_rate 
+         430T      42       42     1  5.187E+00  1.220E-01   number_of_reviews 
+         431T      55       55     1  5.413E+00  1.940E-01   host_response_rate 
+          27      253      253     1  5.452E+00  3.193E-01   review_scores_rating 
+          54      144      144     1  5.300E+00  2.125E-01   reviews_per_month 
+         108       26       26     1  5.583E+00  2.432E-01   accommodates 
+         216       12       12     1  5.405E+00  6.393E-02   reviews_per_month 
+         432T       7        7     1  5.393E+00  9.682E-02   - 
+         433T       5        5     1  5.423E+00  2.991E-02   - 
+         217       14       14     1  5.736E+00  3.593E-01   number_of_reviews 
+         434T       6        6     1  5.494E+00  6.346E-01   - 
+         435T       8        8     1  5.918E+00  1.261E-01   - 
+         109      118      118     1  5.237E+00  1.860E-01   minimum_nights 
+         218       96       96     1  5.297E+00  1.897E-01   reviews_per_month 
+         436T      70       70     1  5.379E+00  1.846E-01   number_of_reviews 
+         437T      26       26     1  5.076E+00  1.421E-01   review_scores_rating 
+         219       22       22     1  4.978E+00  9.105E-02   reviews_per_month 
+         438T       8        8     1  4.904E+00  3.504E-02   - 
+         439T      14       14     1  5.020E+00  1.230E-01   beds 
+          55      109      109     1  5.653E+00  3.919E-01   beds 
+         110T       9        9     1  6.246E+00  3.678E-01   - 
+         111      100      100     1  5.599E+00  3.629E-01   beds 
+         222       88       88     1  5.551E+00  3.651E-01   host_is_superhost 
+         444T      36       36     1  5.489E+00  4.568E-01   review_scores_rating 
+         445T      52       52     1  5.594E+00  3.047E-01   maximum_nights 
+         223       12       12     1  5.953E+00  2.238E-01   number_of_reviews 
+         446T       7        7     1  6.107E+00  1.829E-01   - 
+         447T       5        5     1  5.738E+00  2.421E-01   - 
+           7      398      398     1  6.028E+00  4.761E-01   accommodates 
+          14      215      215     1  5.786E+00  3.515E-01   bathrooms 
+          28      164      164     1  5.649E+00  2.606E-01   reviews_per_month 
+          56      146      146     1  5.689E+00  2.633E-01   review_scores_rating 
+         112       77       77     1  5.579E+00  2.335E-01   bathrooms 
+         224       40       40     1  5.518E+00  2.406E-01   reviews_per_month 
+         448T      26       26     1  5.666E+00  2.098E-01   accommodates 
+         449T      14       14     1  5.245E+00  1.941E-01   accommodates 
+         225       37       37     1  5.645E+00  2.237E-01   review_scores_rating 
+         450T      32       32     1  5.597E+00  2.169E-01   review_scores_rating 
+         451T       5        5     1  5.952E+00  1.968E-01   - 
+         113       69       69     1  5.811E+00  2.718E-01   beds 
+         226       60       60     1  5.822E+00  2.031E-01   reviews_per_month 
+         452T      16       16     1  6.034E+00  2.632E-01   maximum_nights 
+         453T      44       44     1  5.745E+00  1.640E-01   number_of_reviews 
+         227T       9        9     1  5.734E+00  8.047E-01   - 
+          57       18       18     1  5.326E+00  1.288E-01   beds 
+         114T       8        8     1  5.236E+00  9.995E-02   - 
+         115       10       10     1  5.397E+00  1.527E-01   maximum_nights 
+         230T       5        5     1  5.533E+00  6.290E-02   - 
+         231T       5        5     1  5.261E+00  2.343E-01   - 
+          29       51       51     1  6.227E+00  3.948E-01   reviews_per_month 
+          58       13       13     1  6.623E+00  2.465E-01   accommodates 
+         116T       8        8     1  6.555E+00  3.764E-01   - 
+         117T       5        5     1  6.733E+00  5.638E-02   - 
+          59       38       38     1  6.091E+00  3.796E-01   reviews_per_month 
+         118       33       33     1  6.158E+00  3.944E-01   host_is_superhost 
+         236       22       22     1  6.148E+00  4.760E-01   beds 
+         472T      16       16     1  6.136E+00  5.855E-01   beds 
+         473T       6        6     1  6.177E+00  2.412E-01   - 
+         237       11       11     1  6.180E+00  2.615E-01   beds 
+         474T       5        5     1  6.534E+00  8.084E-02   - 
+         475T       6        6     1  5.884E+00  2.279E-01   - 
+         119T       5        5     1  5.650E+00  7.601E-02   - 
+          15      183      183     1  6.313E+00  4.744E-01   reviews_per_month 
+          30       63       63     1  6.800E+00  4.280E-01   minimum_nights 
+          60       16       16     1  6.391E+00  3.793E-01   beds 
+         120T       6        6     1  6.777E+00  3.052E-02   - 
+         121       10       10     1  6.160E+00  4.569E-01   bathrooms 
+         242T       5        5     1  6.406E+00  5.789E-01   - 
+         243T       5        5     1  5.914E+00  2.978E-01   - 
+          61       47       47     1  6.940E+00  3.752E-01   maximum_nights 
+         122       32       32     1  6.978E+00  3.065E-01   beds 
+         244       13       13     1  7.138E+00  2.513E-01   beds 
+         488T       8        8     1  6.947E+00  3.091E-01   - 
+         489T       5        5     1  7.444E+00  2.257E-02   - 
+         245       19       19     1  6.869E+00  3.294E-01   accommodates 
+         490T       8        8     1  6.694E+00  4.530E-01   - 
+         491T      11       11     1  6.997E+00  2.332E-01   beds 
+         123       15       15     1  6.857E+00  5.432E-01   number_of_reviews 
+         246T       9        9     1  6.739E+00  8.360E-01   - 
+         247T       6        6     1  7.034E+00  1.210E-01   - 
+          31      120      120     1  6.057E+00  3.107E-01   host_is_superhost :beds
+          62       78       78     1  6.141E+00  2.616E-01   beds 
+         124       32       32     1  5.923E+00  3.085E-01   host_acceptance_rate 
+         248       22       22     1  5.837E+00  2.099E-01   host_acceptance_rate 
+         496T      17       17     1  5.914E+00  1.236E-01   bathrooms 
+         497T       5        5     1  5.574E+00  4.962E-01   - 
+         249       10       10     1  6.114E+00  5.143E-01   review_scores_rating 
+         498T       5        5     1  5.777E+00  1.150E-01   - 
+         499T       5        5     1  6.451E+00  7.583E-01   - 
+         125       46       46     1  6.293E+00  1.777E-01   host_acceptance_rate 
+         250       17       17     1  6.380E+00  1.104E-01   reviews_per_month 
+         500T       9        9     1  6.492E+00  6.881E-02   - 
+         501T       8        8     1  6.255E+00  1.397E-01   - 
+         251       29       29     1  6.242E+00  2.152E-01   review_scores_rating 
+         502T      20       20     1  6.053E+00  1.065E-01   instant_bookable 
+         503T       9        9     1  6.661E+00  2.127E-01   - 
+          63       42       42     1  5.900E+00  3.720E-01   review_scores_rating 
+         126       13       13     1  5.396E+00  3.080E-01   accommodates 
+         252T       5        5     1  5.240E+00  2.388E-01   - 
+         253T       8        8     1  5.493E+00  3.634E-01   - 
+         127       29       29     1  6.126E+00  2.416E-01   number_of_reviews 
+         254T       9        9     1  5.844E+00  4.334E-02   - 
+         255       20       20     1  6.254E+00  2.829E-01   reviews_per_month 
+         510T      11       11     1  6.548E+00  2.233E-01   host_acceptance_rate 
+         511T       9        9     1  5.893E+00  1.273E-01   - 
+  
+ Number of terminal nodes of final tree: 187
+ Total number of nodes of final tree: 373
+  
+ Regression tree:
+ For categorical variable splits, values not in training data go to the right
+  
+ Node 1: accommodates <= 4.5000000
+   Node 2: accommodates <= 2.5000000
+     Node 4: accommodates <= 1.5000000
+       Node 8: instant_bookable = "t"
+         Node 16: beds <= 1.5000000
+           Node 32: host_acceptance_rate <= 0.93500000 or NA
+             Node 64: price-mean = 3.8897736
+           Node 32: host_acceptance_rate > 0.93500000
+             Node 65: review_scores_rating <= 4.6650000
+               Node 130: price-mean = 3.4418492
+             Node 65: review_scores_rating > 4.6650000 or NA
+               Node 131: number_of_reviews <= 41.500000
+                 Node 262: price-mean = 3.6135003
+               Node 131: number_of_reviews > 41.500000 or NA
+                 Node 263: price-mean = 3.8897865
+         Node 16: beds > 1.5000000 or NA
+           Node 33: price-mean = 3.8400083
+       Node 8: instant_bookable /= "t"
+         Node 17: maximum_nights <= 999.50000
+           Node 34: host_acceptance_rate <= 0.98500000
+             Node 68: price-mean = 3.7404135
+           Node 34: host_acceptance_rate > 0.98500000 or NA
+             Node 69: bathrooms <= 0.50000000 or NA
+               Node 138: price-mean = 3.7071523
+             Node 69: bathrooms > 0.50000000
+               Node 139: bathrooms <= 1.2500000
+                 Node 278: price-mean = 3.9112451
+               Node 139: bathrooms > 1.2500000 or NA
+                 Node 279: price-mean = 4.1254150
+         Node 17: maximum_nights > 999.50000 or NA
+           Node 35: number_of_reviews <= 12.000000
+             Node 70: host_is_superhost = "f"
+               Node 140: host_response_rate = NA
+                 Node 280: price-mean = 4.3795753
+               Node 140: host_response_rate /= NA
+                 Node 281: price-mean = 3.9586755
+             Node 70: host_is_superhost /= "f"
+               Node 141: host_acceptance_rate <= 0.72500000
+                 Node 282: price-mean = 4.6161198
+               Node 141: host_acceptance_rate > 0.72500000 or NA
+                 Node 283: price-mean = 4.3712576
+           Node 35: number_of_reviews > 12.000000 or NA
+             Node 71: host_acceptance_rate <= 0.99500000
+               Node 142: host_acceptance_rate <= 0.92500000
+                 Node 284: price-mean = 3.8396458
+               Node 142: host_acceptance_rate > 0.92500000 or NA
+                 Node 285: price-mean = 3.5886735
+             Node 71: host_acceptance_rate > 0.99500000 or NA
+               Node 143: price-mean = 3.9741103
+     Node 4: accommodates > 1.5000000 or NA
+       Node 9: reviews_per_month <= 0.23500000 or NA
+         Node 18: maximum_nights <= 1059.5000
+           Node 36: maximum_nights <= 447.50000
+             Node 72: host_response_rate <= 0.93500000 or NA
+               Node 144: minimum_nights <= 18.500000
+                 Node 288: price-mean = 5.0348462
+               Node 144: minimum_nights > 18.500000 or NA
+                 Node 289: price-mean = 4.7733324
+             Node 72: host_response_rate > 0.93500000
+               Node 145: bathrooms <= 1.7500000
+                 Node 290: price-mean = 4.3552666
+               Node 145: bathrooms > 1.7500000 or NA
+                 Node 291: price-mean = 3.8582368
+           Node 36: maximum_nights > 447.50000 or NA
+             Node 73: instant_bookable = "t"
+               Node 146: price-mean = 3.3077546
+             Node 73: instant_bookable /= "t"
+               Node 147: price-mean = 3.7516586
+         Node 18: maximum_nights > 1059.5000 or NA
+           Node 37: minimum_nights <= 32.500000
+             Node 74: host_acceptance_rate <= 0.14000000
+               Node 148: host_response_rate <= 0.87500000
+                 Node 296: price-mean = 3.7232284
+               Node 148: host_response_rate > 0.87500000 or NA
+                 Node 297: price-mean = 5.0725443
+             Node 74: host_acceptance_rate > 0.14000000 or NA
+               Node 149: beds <= 1.5000000 or NA
+                 Node 298: price-mean = 4.8040823
+               Node 149: beds > 1.5000000
+                 Node 299: price-mean = 4.4509161
+           Node 37: minimum_nights > 32.500000 or NA
+             Node 75: bathrooms <= 1.5000000
+               Node 150: host_is_superhost = "f"
+                 Node 300: price-mean = 4.9791055
+               Node 150: host_is_superhost /= "f"
+                 Node 301: price-mean = 5.1075565
+             Node 75: bathrooms > 1.5000000 or NA
+               Node 151: price-mean = 4.2531064
+       Node 9: reviews_per_month > 0.23500000
+         Node 19: review_scores_rating <= 4.8950000
+           Node 38: bathrooms <= 1.7500000 or NA
+             Node 76: beds <= 1.5000000
+               Node 152: host_is_superhost = "f"
+                 Node 304: price-mean = 4.1555155
+               Node 152: host_is_superhost /= "f"
+                 Node 305: price-mean = 4.1800515
+             Node 76: beds > 1.5000000 or NA
+               Node 153: reviews_per_month <= 1.2000000
+                 Node 306: price-mean = 4.1310926
+               Node 153: reviews_per_month > 1.2000000 or NA
+                 Node 307: price-mean = 4.6773488
+           Node 38: bathrooms > 1.7500000
+             Node 77: price-mean = 3.8123686
+         Node 19: review_scores_rating > 4.8950000 or NA
+           Node 39: minimum_nights <= 1.5000000
+             Node 78: maximum_nights <= 17.000000
+               Node 156: price-mean = 4.6287152
+             Node 78: maximum_nights > 17.000000 or NA
+               Node 157: host_is_superhost = "t"
+                 Node 314: price-mean = 4.2236440
+               Node 157: host_is_superhost /= "t"
+                 Node 315: price-mean = 4.2383216
+           Node 39: minimum_nights > 1.5000000 or NA
+             Node 79: maximum_nights <= 1124.5000
+               Node 158: minimum_nights <= 4.5000000
+                 Node 316: price-mean = 4.4083140
+               Node 158: minimum_nights > 4.5000000 or NA
+                 Node 317: price-mean = 4.2432344
+             Node 79: maximum_nights > 1124.5000 or NA
+               Node 159: host_acceptance_rate = NA
+                 Node 318: price-mean = 5.1465187
+               Node 159: host_acceptance_rate /= NA
+                 Node 319: price-mean = 4.5888808
+   Node 2: accommodates > 2.5000000 or NA
+     Node 5: reviews_per_month <= 1.6050000 or NA
+       Node 10: bathrooms <= 1.2500000 or NA
+         Node 20: review_scores_rating <= 4.8450000
+           Node 40: minimum_nights <= 4.5000000
+             Node 80: maximum_nights <= 927.50000
+               Node 160: maximum_nights <= 29.500000
+                 Node 320: price-mean = 4.9314057
+               Node 160: maximum_nights > 29.500000 or NA
+                 Node 321: price-mean = 4.6756818
+             Node 80: maximum_nights > 927.50000 or NA
+               Node 161: minimum_nights <= 1.5000000
+                 Node 322: price-mean = 5.2041469
+               Node 161: minimum_nights > 1.5000000 or NA
+                 Node 323: price-mean = 4.7894155
+           Node 40: minimum_nights > 4.5000000 or NA
+             Node 81: review_scores_rating <= 4.7700000
+               Node 162: review_scores_rating <= 4.6150000
+                 Node 324: price-mean = 4.4036442
+               Node 162: review_scores_rating > 4.6150000 or NA
+                 Node 325: price-mean = 4.6983938
+             Node 81: review_scores_rating > 4.7700000 or NA
+               Node 163: review_scores_rating <= 4.8050000
+                 Node 326: price-mean = 4.1320391
+               Node 163: review_scores_rating > 4.8050000 or NA
+                 Node 327: price-mean = 4.4057371
+         Node 20: review_scores_rating > 4.8450000 or NA
+           Node 41: host_is_superhost = "f"
+             Node 82: maximum_nights <= 865.00000
+               Node 164: instant_bookable = "f"
+                 Node 328: price-mean = 4.7481488
+               Node 164: instant_bookable /= "f"
+                 Node 329: price-mean = 4.8156104
+             Node 82: maximum_nights > 865.00000 or NA
+               Node 165: instant_bookable = "f"
+                 Node 330: price-mean = 5.0437982
+               Node 165: instant_bookable /= "f"
+                 Node 331: price-mean = 5.4572011
+           Node 41: host_is_superhost /= "f"
+             Node 83: minimum_nights <= 2.5000000
+               Node 166: accommodates <= 3.5000000
+                 Node 332: price-mean = 4.7535204
+               Node 166: accommodates > 3.5000000 or NA
+                 Node 333: price-mean = 5.0926623
+             Node 83: minimum_nights > 2.5000000 or NA
+               Node 167: minimum_nights <= 46.500000
+                 Node 334: price-mean = 4.7553121
+               Node 167: minimum_nights > 46.500000 or NA
+                 Node 335: price-mean = 5.0369899
+       Node 10: bathrooms > 1.2500000
+         Node 21: accommodates <= 3.5000000
+           Node 42: maximum_nights <= 108.00000
+             Node 84: price-mean = 4.1905259
+           Node 42: maximum_nights > 108.00000 or NA
+             Node 85: number_of_reviews <= 8.5000000
+               Node 170: price-mean = 4.7320046
+             Node 85: number_of_reviews > 8.5000000 or NA
+               Node 171: price-mean = 4.4816458
+         Node 21: accommodates > 3.5000000 or NA
+           Node 43: beds <= 2.5000000
+             Node 86: reviews_per_month <= 0.10500000 or NA
+               Node 172: host_acceptance_rate <= 0.95000000
+                 Node 344: price-mean = 5.3297107
+               Node 172: host_acceptance_rate > 0.95000000 or NA
+                 Node 345: price-mean = 5.1617636
+             Node 86: reviews_per_month > 0.10500000
+               Node 173: minimum_nights <= 4.0000000
+                 Node 346: price-mean = 5.2158404
+               Node 173: minimum_nights > 4.0000000 or NA
+                 Node 347: price-mean = 4.9939326
+           Node 43: beds > 2.5000000 or NA
+             Node 87: review_scores_rating <= 4.7100000
+               Node 174: price-mean = 4.2028519
+             Node 87: review_scores_rating > 4.7100000 or NA
+               Node 175: minimum_nights <= 2.5000000
+                 Node 350: price-mean = 5.6461716
+               Node 175: minimum_nights > 2.5000000 or NA
+                 Node 351: price-mean = 5.0142984
+     Node 5: reviews_per_month > 1.6050000
+       Node 11: review_scores_rating <= 4.9050000
+         Node 22: maximum_nights <= 1124.5000
+           Node 44: minimum_nights <= 2.5000000
+             Node 88: minimum_nights <= 1.5000000
+               Node 176: host_acceptance_rate <= 0.91500000
+                 Node 352: price-mean = 4.0149635
+               Node 176: host_acceptance_rate > 0.91500000 or NA
+                 Node 353: price-mean = 4.3521543
+             Node 88: minimum_nights > 1.5000000 or NA
+               Node 177: beds <= 1.5000000
+                 Node 354: price-mean = 3.8438623
+               Node 177: beds > 1.5000000 or NA
+                 Node 355: price-mean = 4.5495071
+           Node 44: minimum_nights > 2.5000000 or NA
+             Node 89: minimum_nights <= 31.500000
+               Node 178: reviews_per_month <= 2.7550000
+                 Node 356: price-mean = 4.8188637
+               Node 178: reviews_per_month > 2.7550000 or NA
+                 Node 357: price-mean = 4.4538848
+             Node 89: minimum_nights > 31.500000 or NA
+               Node 179: number_of_reviews <= 184.00000
+                 Node 358: price-mean = 4.2666496
+               Node 179: number_of_reviews > 184.00000 or NA
+                 Node 359: price-mean = 4.0802118
+         Node 22: maximum_nights > 1124.5000 or NA
+           Node 45: reviews_per_month <= 2.2350000
+             Node 90: number_of_reviews <= 100.00000
+               Node 180: review_scores_rating <= 4.7250000
+                 Node 360: price-mean = 4.6782439
+               Node 180: review_scores_rating > 4.7250000 or NA
+                 Node 361: price-mean = 4.8904946
+             Node 90: number_of_reviews > 100.00000 or NA
+               Node 181: price-mean = 4.9827752
+           Node 45: reviews_per_month > 2.2350000 or NA
+             Node 91: minimum_nights <= 4.0000000
+               Node 182: host_is_superhost = "t"
+                 Node 364: price-mean = 4.4857987
+               Node 182: host_is_superhost /= "t"
+                 Node 365: price-mean = 4.8035408
+             Node 91: minimum_nights > 4.0000000 or NA
+               Node 183: price-mean = 4.2848464
+       Node 11: review_scores_rating > 4.9050000 or NA
+         Node 23: review_scores_rating <= 4.9450000
+           Node 46: reviews_per_month <= 1.8000000
+             Node 92: price-mean = 4.9569615
+           Node 46: reviews_per_month > 1.8000000 or NA
+             Node 93: bathrooms <= 1.5000000
+               Node 186: number_of_reviews <= 93.000000
+                 Node 372: price-mean = 4.6635807
+               Node 186: number_of_reviews > 93.000000 or NA
+                 Node 373: price-mean = 4.5478524
+             Node 93: bathrooms > 1.5000000 or NA
+               Node 187: price-mean = 4.8017823
+         Node 23: review_scores_rating > 4.9450000 or NA
+           Node 47: accommodates <= 3.5000000
+             Node 94: review_scores_rating <= 4.9950000
+               Node 188: reviews_per_month <= 3.6300000
+                 Node 376: price-mean = 4.8309261
+               Node 188: reviews_per_month > 3.6300000 or NA
+                 Node 377: price-mean = 4.6435358
+             Node 94: review_scores_rating > 4.9950000 or NA
+               Node 189: host_is_superhost = "f"
+                 Node 378: price-mean = 4.1608081
+               Node 189: host_is_superhost /= "f"
+                 Node 379: price-mean = 4.6369569
+           Node 47: accommodates > 3.5000000 or NA
+             Node 95: review_scores_rating <= 4.9650000
+               Node 190: host_acceptance_rate <= 0.95000000 or NA
+                 Node 380: price-mean = 4.9345620
+               Node 190: host_acceptance_rate > 0.95000000
+                 Node 381: price-mean = 4.6984119
+             Node 95: review_scores_rating > 4.9650000 or NA
+               Node 191: host_is_superhost = "f"
+                 Node 382: price-mean = 4.7318140
+               Node 191: host_is_superhost /= "f"
+                 Node 383: price-mean = 4.9055269
+ Node 1: accommodates > 4.5000000 or NA
+   Node 3: bathrooms <= 2.2500000 or NA
+     Node 6: bathrooms <= 1.2500000
+       Node 12: reviews_per_month <= 1.7400000 or NA
+         Node 24: reviews_per_month <= 0.77500000 or NA
+           Node 48: minimum_nights <= 2.5000000
+             Node 96: minimum_nights <= 1.5000000
+               Node 192: host_acceptance_rate <= 0.99500000
+                 Node 384: price-mean = 5.4836416
+               Node 192: host_acceptance_rate > 0.99500000 or NA
+                 Node 385: price-mean = 5.1102002
+             Node 96: minimum_nights > 1.5000000 or NA
+               Node 193: number_of_reviews <= 5.0000000
+                 Node 386: price-mean = 4.9267511
+               Node 193: number_of_reviews > 5.0000000 or NA
+                 Node 387: price-mean = 5.5761221
+           Node 48: minimum_nights > 2.5000000 or NA
+             Node 97: reviews_per_month <= 0.23500000 or NA
+               Node 194: host_acceptance_rate <= 0.94500000 or NA
+                 Node 388: price-mean = 5.0656967
+               Node 194: host_acceptance_rate > 0.94500000
+                 Node 389: price-mean = 4.7586496
+             Node 97: reviews_per_month > 0.23500000
+               Node 195: accommodates <= 5.5000000
+                 Node 390: price-mean = 4.5342194
+               Node 195: accommodates > 5.5000000 or NA
+                 Node 391: price-mean = 4.7827103
+         Node 24: reviews_per_month > 0.77500000
+           Node 49: host_response_rate = NA
+             Node 98: minimum_nights <= 2.5000000
+               Node 196: price-mean = 6.3557547
+             Node 98: minimum_nights > 2.5000000 or NA
+               Node 197: reviews_per_month <= 1.2900000
+                 Node 394: price-mean = 5.4041236
+               Node 197: reviews_per_month > 1.2900000 or NA
+                 Node 395: price-mean = 5.0724967
+           Node 49: host_response_rate /= NA
+             Node 99: review_scores_rating <= 4.8550000
+               Node 198: review_scores_rating <= 4.5950000
+                 Node 396: price-mean = 4.6658431
+               Node 198: review_scores_rating > 4.5950000 or NA
+                 Node 397: price-mean = 4.9294761
+             Node 99: review_scores_rating > 4.8550000 or NA
+               Node 199: maximum_nights <= 110.00000
+                 Node 398: price-mean = 5.2082887
+               Node 199: maximum_nights > 110.00000 or NA
+                 Node 399: price-mean = 4.9810799
+       Node 12: reviews_per_month > 1.7400000
+         Node 25: review_scores_rating <= 4.8650000
+           Node 50: host_is_superhost = "f"
+             Node 100: price-mean = 4.5903121
+           Node 50: host_is_superhost /= "f"
+             Node 101: host_acceptance_rate <= 0.99500000
+               Node 202: number_of_reviews <= 93.500000
+                 Node 404: price-mean = 4.4562774
+               Node 202: number_of_reviews > 93.500000 or NA
+                 Node 405: price-mean = 4.8779905
+             Node 101: host_acceptance_rate > 0.99500000 or NA
+               Node 203: number_of_reviews <= 34.000000
+                 Node 406: price-mean = 4.9704874
+               Node 203: number_of_reviews > 34.000000 or NA
+                 Node 407: price-mean = 4.6518721
+         Node 25: review_scores_rating > 4.8650000 or NA
+           Node 51: reviews_per_month <= 4.1450000
+             Node 102: beds <= 3.5000000
+               Node 204: number_of_reviews <= 7.5000000
+                 Node 408: price-mean = 4.6359847
+               Node 204: number_of_reviews > 7.5000000 or NA
+                 Node 409: price-mean = 4.8979718
+             Node 102: beds > 3.5000000 or NA
+               Node 205: review_scores_rating <= 4.9150000
+                 Node 410: price-mean = 4.9301590
+               Node 205: review_scores_rating > 4.9150000 or NA
+                 Node 411: price-mean = 5.0798309
+           Node 51: reviews_per_month > 4.1450000 or NA
+             Node 103: minimum_nights <= 1.5000000
+               Node 206: number_of_reviews <= 37.000000
+                 Node 412: price-mean = 4.4109218
+               Node 206: number_of_reviews > 37.000000 or NA
+                 Node 413: price-mean = 4.6714191
+             Node 103: minimum_nights > 1.5000000 or NA
+               Node 207: number_of_reviews <= 197.50000
+                 Node 414: price-mean = 4.7838302
+               Node 207: number_of_reviews > 197.50000 or NA
+                 Node 415: price-mean = 5.0225397
+     Node 6: bathrooms > 1.2500000 or NA
+       Node 13: accommodates <= 7.5000000
+         Node 26: maximum_nights <= 452.50000
+           Node 52: reviews_per_month <= 1.5950000
+             Node 104: host_acceptance_rate <= 0.99500000 or NA
+               Node 208: instant_bookable = "f"
+                 Node 416: price-mean = 5.3021021
+               Node 208: instant_bookable /= "f"
+                 Node 417: price-mean = 5.4940340
+             Node 104: host_acceptance_rate > 0.99500000
+               Node 209: maximum_nights <= 190.00000
+                 Node 418: price-mean = 5.2739907
+               Node 209: maximum_nights > 190.00000 or NA
+                 Node 419: price-mean = 5.0781894
+           Node 52: reviews_per_month > 1.5950000 or NA
+             Node 105: review_scores_rating <= 4.8650000
+               Node 210: minimum_nights <= 1.5000000
+                 Node 420: price-mean = 4.5482445
+               Node 210: minimum_nights > 1.5000000 or NA
+                 Node 421: price-mean = 5.0162083
+             Node 105: review_scores_rating > 4.8650000 or NA
+               Node 211: instant_bookable = "t"
+                 Node 422: price-mean = 5.1480936
+               Node 211: instant_bookable /= "t"
+                 Node 423: price-mean = 5.1634564
+         Node 26: maximum_nights > 452.50000 or NA
+           Node 53: review_scores_rating <= 4.4500000 or NA
+             Node 106: host_response_rate = NA
+               Node 212: price-mean = 5.2695226
+             Node 106: host_response_rate /= NA
+               Node 213: price-mean = 4.8852982
+           Node 53: review_scores_rating > 4.4500000
+             Node 107: bathrooms <= 1.7500000
+               Node 214: reviews_per_month <= 0.90500000
+                 Node 428: price-mean = 5.5216654
+               Node 214: reviews_per_month > 0.90500000 or NA
+                 Node 429: price-mean = 5.0392532
+             Node 107: bathrooms > 1.7500000 or NA
+               Node 215: host_acceptance_rate <= 0.98500000 or NA
+                 Node 430: price-mean = 5.1870660
+               Node 215: host_acceptance_rate > 0.98500000
+                 Node 431: price-mean = 5.4130193
+       Node 13: accommodates > 7.5000000 or NA
+         Node 27: review_scores_rating <= 4.9150000
+           Node 54: reviews_per_month <= 1.1300000
+             Node 108: accommodates <= 8.5000000
+               Node 216: reviews_per_month <= 0.68000000
+                 Node 432: price-mean = 5.3925528
+               Node 216: reviews_per_month > 0.68000000 or NA
+                 Node 433: price-mean = 5.4229743
+             Node 108: accommodates > 8.5000000 or NA
+               Node 217: number_of_reviews <= 7.0000000
+                 Node 434: price-mean = 5.4936876
+               Node 217: number_of_reviews > 7.0000000 or NA
+                 Node 435: price-mean = 5.9176103
+           Node 54: reviews_per_month > 1.1300000 or NA
+             Node 109: minimum_nights <= 2.5000000
+               Node 218: reviews_per_month <= 3.4850000
+                 Node 436: price-mean = 5.3786412
+               Node 218: reviews_per_month > 3.4850000 or NA
+                 Node 437: price-mean = 5.0760984
+             Node 109: minimum_nights > 2.5000000 or NA
+               Node 219: reviews_per_month <= 1.8550000
+                 Node 438: price-mean = 4.9039732
+               Node 219: reviews_per_month > 1.8550000 or NA
+                 Node 439: price-mean = 5.0195343
+         Node 27: review_scores_rating > 4.9150000 or NA
+           Node 55: beds <= 2.5000000
+             Node 110: price-mean = 6.2461250
+           Node 55: beds > 2.5000000 or NA
+             Node 111: beds <= 6.5000000
+               Node 222: host_is_superhost = "f"
+                 Node 444: price-mean = 5.4892783
+               Node 222: host_is_superhost /= "f"
+                 Node 445: price-mean = 5.5941453
+             Node 111: beds > 6.5000000 or NA
+               Node 223: number_of_reviews <= 43.500000
+                 Node 446: price-mean = 6.1066710
+               Node 223: number_of_reviews > 43.500000 or NA
+                 Node 447: price-mean = 5.7381152
+   Node 3: bathrooms > 2.2500000
+     Node 7: accommodates <= 11.500000
+       Node 14: bathrooms <= 3.2500000
+         Node 28: reviews_per_month <= 3.3300000 or NA
+           Node 56: review_scores_rating <= 4.9250000 or NA
+             Node 112: bathrooms <= 2.7500000
+               Node 224: reviews_per_month <= 1.4150000 or NA
+                 Node 448: price-mean = 5.6659928
+               Node 224: reviews_per_month > 1.4150000
+                 Node 449: price-mean = 5.2445673
+             Node 112: bathrooms > 2.7500000 or NA
+               Node 225: review_scores_rating <= 4.8550000 or NA
+                 Node 450: price-mean = 5.5973365
+               Node 225: review_scores_rating > 4.8550000
+                 Node 451: price-mean = 5.9516457
+           Node 56: review_scores_rating > 4.9250000
+             Node 113: beds <= 5.5000000
+               Node 226: reviews_per_month <= 0.92000000
+                 Node 452: price-mean = 6.0343784
+               Node 226: reviews_per_month > 0.92000000 or NA
+                 Node 453: price-mean = 5.7448853
+             Node 113: beds > 5.5000000 or NA
+               Node 227: price-mean = 5.7338228
+         Node 28: reviews_per_month > 3.3300000
+           Node 57: beds <= 4.5000000
+             Node 114: price-mean = 5.2361784
+           Node 57: beds > 4.5000000 or NA
+             Node 115: maximum_nights <= 745.00000
+               Node 230: price-mean = 5.5333067
+             Node 115: maximum_nights > 745.00000 or NA
+               Node 231: price-mean = 5.2610992
+       Node 14: bathrooms > 3.2500000 or NA
+         Node 29: reviews_per_month <= 0.84500000
+           Node 58: accommodates <= 9.0000000
+             Node 116: price-mean = 6.5547433
+           Node 58: accommodates > 9.0000000 or NA
+             Node 117: price-mean = 6.7326872
+         Node 29: reviews_per_month > 0.84500000 or NA
+           Node 59: reviews_per_month <= 2.4700000 or NA
+             Node 118: host_is_superhost = "f"
+               Node 236: beds <= 5.5000000
+                 Node 472: price-mean = 6.1364953
+               Node 236: beds > 5.5000000 or NA
+                 Node 473: price-mean = 6.1774456
+             Node 118: host_is_superhost /= "f"
+               Node 237: beds <= 4.5000000
+                 Node 474: price-mean = 6.5343970
+               Node 237: beds > 4.5000000 or NA
+                 Node 475: price-mean = 5.8843117
+           Node 59: reviews_per_month > 2.4700000
+             Node 119: price-mean = 5.6499410
+     Node 7: accommodates > 11.500000 or NA
+       Node 15: reviews_per_month <= 0.50000000 or NA
+         Node 30: minimum_nights <= 1.5000000
+           Node 60: beds <= 5.0000000
+             Node 120: price-mean = 6.7767587
+           Node 60: beds > 5.0000000 or NA
+             Node 121: bathrooms <= 3.7500000
+               Node 242: price-mean = 6.4061506
+             Node 121: bathrooms > 3.7500000 or NA
+               Node 243: price-mean = 5.9142586
+         Node 30: minimum_nights > 1.5000000 or NA
+           Node 61: maximum_nights <= 547.50000
+             Node 122: beds <= 5.0000000
+               Node 244: beds <= 3.5000000
+                 Node 488: price-mean = 6.9465341
+               Node 244: beds > 3.5000000 or NA
+                 Node 489: price-mean = 7.4438157
+             Node 122: beds > 5.0000000 or NA
+               Node 245: accommodates <= 13.000000
+                 Node 490: price-mean = 6.6935490
+               Node 245: accommodates > 13.000000 or NA
+                 Node 491: price-mean = 6.9968621
+           Node 61: maximum_nights > 547.50000 or NA
+             Node 123: number_of_reviews <= 4.5000000
+               Node 246: price-mean = 6.7392348
+             Node 123: number_of_reviews > 4.5000000 or NA
+               Node 247: price-mean = 7.0338702
+       Node 15: reviews_per_month > 0.50000000
+         Node 31: host_is_superhost = "t"
+           Node 62: beds <= 6.5000000
+             Node 124: host_acceptance_rate <= 0.99500000
+               Node 248: host_acceptance_rate <= 0.98500000
+                 Node 496: price-mean = 5.9139648
+               Node 248: host_acceptance_rate > 0.98500000 or NA
+                 Node 497: price-mean = 5.5740522
+             Node 124: host_acceptance_rate > 0.99500000 or NA
+               Node 249: review_scores_rating <= 4.9000000
+                 Node 498: price-mean = 5.7768341
+               Node 249: review_scores_rating > 4.9000000 or NA
+                 Node 499: price-mean = 6.4506112
+           Node 62: beds > 6.5000000 or NA
+             Node 125: host_acceptance_rate <= 0.98500000
+               Node 250: reviews_per_month <= 1.8500000
+                 Node 500: price-mean = 6.4917713
+               Node 250: reviews_per_month > 1.8500000 or NA
+                 Node 501: price-mean = 6.2547933
+             Node 125: host_acceptance_rate > 0.98500000 or NA
+               Node 251: review_scores_rating <= 4.9750000
+                 Node 502: price-mean = 6.0525926
+               Node 251: review_scores_rating > 4.9750000 or NA
+                 Node 503: price-mean = 6.6614516
+         Node 31: host_is_superhost /= "t"
+           Node 63: review_scores_rating <= 4.6850000
+             Node 126: accommodates <= 13.000000
+               Node 252: price-mean = 5.2403289
+             Node 126: accommodates > 13.000000 or NA
+               Node 253: price-mean = 5.4929811
+           Node 63: review_scores_rating > 4.6850000 or NA
+             Node 127: number_of_reviews <= 10.500000
+               Node 254: price-mean = 5.8439245
+             Node 127: number_of_reviews > 10.500000 or NA
+               Node 255: reviews_per_month <= 1.7300000
+                 Node 510: price-mean = 6.5484633
+               Node 255: reviews_per_month > 1.7300000 or NA
+                 Node 511: price-mean = 5.8932936
+ 
+ ***************************************************************
+ Predictor means below are means of cases with no missing values.
+  
+ WARNING: p-values below not adjusted for split search. For a bootstrap solution see:
+  
+ 1. Loh et al. (2016), "Identification of subgroups with differential treatment effects
+ for longitudinal and multiresponse variables", Statistics in Medicine, v.35, 4837-4855.
+  
+ 2. Loh et al. (2019), "Subgroups from regression trees with adjustment for prognostic
+ effects and post-selection inference", Statistics in Medicine, v.38, 545-557.
+  
+ 3. Loh and Zhou (2020), "The GUIDE approach to subgroup identification",
+ in "Design and Analysis of Subgroups with Biopharmaceutical Applications", Springer, pp.147-165.
+  
+Node 1: Intermediate node
+ A case goes into Node 2 if accommodates <= 4.5000000
+ accommodates mean = 4.3846000
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.757        437.8        0.000    
+ ----------------------------
+Node 2: Intermediate node
+ A case goes into Node 4 if accommodates <= 2.5000000
+ accommodates mean = 2.6402680
+ ----------------------------
+Node 4: Intermediate node
+ A case goes into Node 8 if accommodates <= 1.5000000
+ accommodates mean = 1.8408142
+ ----------------------------
+Node 8: Intermediate node
+ A case goes into Node 16 if instant_bookable = "t"
+ instant_bookable mode = "f"
+ ----------------------------
+Node 16: Intermediate node
+ A case goes into Node 32 if beds <= 1.5000000
+ beds mean = 1.3513514
+ ----------------------------
+Node 32: Intermediate node
+ A case goes into Node 64 if host_acceptance_rate <= 0.93500000 or NA
+ host_acceptance_rate mean = 0.97718750
+ ----------------------------
+Node 64: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.890        18.22        0.000    
+ price mean = 3.88977
+ ----------------------------
+Node 65: Intermediate node
+ A case goes into Node 130 if review_scores_rating <= 4.6650000
+ review_scores_rating mean = 4.5752830
+ ----------------------------
+Node 130: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.442        62.79        0.000    
+ price mean = 3.44185
+ ----------------------------
+Node 131: Intermediate node
+ A case goes into Node 262 if number_of_reviews <= 41.500000
+ number_of_reviews mean = 30.967742
+ ----------------------------
+Node 262: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.614        53.78        0.000    
+ price mean = 3.61350
+ ----------------------------
+Node 263: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.890        35.41        0.000    
+ price mean = 3.88979
+ ----------------------------
+Node 33: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.840        37.34        0.000    
+ price mean = 3.84001
+ ----------------------------
+Node 17: Intermediate node
+ A case goes into Node 34 if maximum_nights <= 999.50000
+ maximum_nights mean = 509.53247
+ ----------------------------
+Node 34: Intermediate node
+ A case goes into Node 68 if host_acceptance_rate <= 0.98500000
+ host_acceptance_rate mean = 0.80277372
+ ----------------------------
+Node 68: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.740        87.06        0.000    
+ price mean = 3.74041
+ ----------------------------
+Node 69: Intermediate node
+ A case goes into Node 138 if bathrooms <= 0.50000000 or NA
+ bathrooms mean = 0.88709677
+ ----------------------------
+Node 138: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.707        121.5        0.000    
+ price mean = 3.70715
+ ----------------------------
+Node 139: Intermediate node
+ A case goes into Node 278 if bathrooms <= 1.2500000
+ bathrooms mean = 1.1956522
+ ----------------------------
+Node 278: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.911        56.29        0.000    
+ price mean = 3.91125
+ ----------------------------
+Node 279: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.125        43.68        0.000    
+ price mean = 4.12542
+ ----------------------------
+Node 35: Intermediate node
+ A case goes into Node 70 if number_of_reviews <= 12.000000
+ number_of_reviews mean = 31.073529
+ ----------------------------
+Node 70: Intermediate node
+ A case goes into Node 140 if host_is_superhost = "f"
+ host_is_superhost mode = "f"
+ ----------------------------
+Node 140: Intermediate node
+ A case goes into Node 280 if host_response_rate = NA
+ host_response_rate mean = 0.73555556
+ ----------------------------
+Node 280: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.380        13.75        0.000    
+ price mean = 4.37958
+ ----------------------------
+Node 281: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.959        19.79        0.000    
+ price mean = 3.95868
+ ----------------------------
+Node 141: Intermediate node
+ A case goes into Node 282 if host_acceptance_rate <= 0.72500000
+ host_acceptance_rate mean = 0.77454545
+ ----------------------------
+Node 282: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.616        53.54        0.000    
+ price mean = 4.61612
+ ----------------------------
+Node 283: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.371        22.20        0.000    
+ price mean = 4.37126
+ ----------------------------
+Node 71: Intermediate node
+ A case goes into Node 142 if host_acceptance_rate <= 0.99500000
+ host_acceptance_rate mean = 0.90567568
+ ----------------------------
+Node 142: Intermediate node
+ A case goes into Node 284 if host_acceptance_rate <= 0.92500000
+ host_acceptance_rate mean = 0.87535714
+ ----------------------------
+Node 284: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.840        51.04        0.000    
+ price mean = 3.83965
+ ----------------------------
+Node 285: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.589        43.94        0.000    
+ price mean = 3.58867
+ ----------------------------
+Node 143: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.974        41.65        0.000    
+ price mean = 3.97411
+ ----------------------------
+Node 9: Intermediate node
+ A case goes into Node 18 if reviews_per_month <= 0.23500000 or NA
+ reviews_per_month mean = 1.8227177
+ ----------------------------
+Node 18: Intermediate node
+ A case goes into Node 36 if maximum_nights <= 1059.5000
+ maximum_nights mean = 784.41750
+ ----------------------------
+Node 36: Intermediate node
+ A case goes into Node 72 if maximum_nights <= 447.50000
+ maximum_nights mean = 325.79461
+ ----------------------------
+Node 72: Intermediate node
+ A case goes into Node 144 if host_response_rate <= 0.93500000 or NA
+ host_response_rate mean = 0.95899543
+ ----------------------------
+Node 144: Intermediate node
+ A case goes into Node 288 if minimum_nights <= 18.500000
+ minimum_nights mean = 28.478261
+ ----------------------------
+Node 288: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.035        23.93        0.000    
+ price mean = 5.03485
+ ----------------------------
+Node 289: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.773        59.92        0.000    
+ price mean = 4.77333
+ ----------------------------
+Node 145: Intermediate node
+ A case goes into Node 290 if bathrooms <= 1.7500000
+ bathrooms mean = 1.1641026
+ ----------------------------
+Node 290: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.355        85.86        0.000    
+ price mean = 4.35527
+ ----------------------------
+Node 291: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.858        36.62        0.000    
+ price mean = 3.85824
+ ----------------------------
+Node 73: Intermediate node
+ A case goes into Node 146 if instant_bookable = "t"
+ instant_bookable mode = "f"
+ ----------------------------
+Node 146: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.308        64.35        0.000    
+ price mean = 3.30775
+ ----------------------------
+Node 147: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.752        65.69        0.000    
+ price mean = 3.75166
+ ----------------------------
+Node 37: Intermediate node
+ A case goes into Node 74 if minimum_nights <= 32.500000
+ minimum_nights mean = 41.195000
+ ----------------------------
+Node 74: Intermediate node
+ A case goes into Node 148 if host_acceptance_rate <= 0.14000000
+ host_acceptance_rate mean = 0.87920765
+ ----------------------------
+Node 148: Intermediate node
+ A case goes into Node 296 if host_response_rate <= 0.87500000
+ host_response_rate mean = 0.79761905
+ ----------------------------
+Node 296: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.723        80.88        0.000    
+ price mean = 3.72323
+ ----------------------------
+Node 297: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.073        60.37        0.000    
+ price mean = 5.07254
+ ----------------------------
+Node 149: Intermediate node
+ A case goes into Node 298 if beds <= 1.5000000 or NA
+ beds mean = 1.0277778
+ ----------------------------
+Node 298: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.804        215.7        0.000    
+ price mean = 4.80408
+ ----------------------------
+Node 299: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.451        47.90        0.000    
+ price mean = 4.45092
+ ----------------------------
+Node 75: Intermediate node
+ A case goes into Node 150 if bathrooms <= 1.5000000
+ bathrooms mean = 1.2941176
+ ----------------------------
+Node 150: Intermediate node
+ A case goes into Node 300 if host_is_superhost = "f"
+ host_is_superhost mode = "f"
+ ----------------------------
+Node 300: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.979        49.81        0.000    
+ price mean = 4.97911
+ ----------------------------
+Node 301: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.108        400.1        0.000    
+ price mean = 5.10756
+ ----------------------------
+Node 151: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.253        10.99        0.000    
+ price mean = 4.25311
+ ----------------------------
+Node 19: Intermediate node
+ A case goes into Node 38 if review_scores_rating <= 4.8950000
+ review_scores_rating mean = 4.7231182
+ ----------------------------
+Node 38: Intermediate node
+ A case goes into Node 76 if bathrooms <= 1.7500000 or NA
+ bathrooms mean = 1.1458685
+ ----------------------------
+Node 76: Intermediate node
+ A case goes into Node 152 if beds <= 1.5000000
+ beds mean = 1.0699433
+ ----------------------------
+Node 152: Intermediate node
+ A case goes into Node 304 if host_is_superhost = "f"
+ host_is_superhost mode = "f"
+ ----------------------------
+Node 304: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.156        131.3        0.000    
+ price mean = 4.15552
+ ----------------------------
+Node 305: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.180        149.9        0.000    
+ price mean = 4.18005
+ ----------------------------
+Node 153: Intermediate node
+ A case goes into Node 306 if reviews_per_month <= 1.2000000
+ reviews_per_month mean = 1.7429730
+ ----------------------------
+Node 306: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.131        39.20        0.000    
+ price mean = 4.13109
+ ----------------------------
+Node 307: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.677        69.13        0.000    
+ price mean = 4.67735
+ ----------------------------
+Node 77: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.812        71.81        0.000    
+ price mean = 3.81237
+ ----------------------------
+Node 39: Intermediate node
+ A case goes into Node 78 if minimum_nights <= 1.5000000
+ minimum_nights mean = 10.206897
+ ----------------------------
+Node 78: Intermediate node
+ A case goes into Node 156 if maximum_nights <= 17.000000
+ maximum_nights mean = 347.09783
+ ----------------------------
+Node 156: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.629        26.09        0.000    
+ price mean = 4.62872
+ ----------------------------
+Node 157: Intermediate node
+ A case goes into Node 314 if host_is_superhost = "t"
+ host_is_superhost mode = "t"
+ ----------------------------
+Node 314: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.224        77.70        0.000    
+ price mean = 4.22364
+ ----------------------------
+Node 315: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.238        40.80        0.000    
+ price mean = 4.23832
+ ----------------------------
+Node 79: Intermediate node
+ A case goes into Node 158 if maximum_nights <= 1124.5000
+ maximum_nights mean = 519.90308
+ ----------------------------
+Node 158: Intermediate node
+ A case goes into Node 316 if minimum_nights <= 4.5000000
+ minimum_nights mean = 12.788079
+ ----------------------------
+Node 316: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.408        80.39        0.000    
+ price mean = 4.40831
+ ----------------------------
+Node 317: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.243        53.41        0.000    
+ price mean = 4.24323
+ ----------------------------
+Node 159: Intermediate node
+ A case goes into Node 318 if host_acceptance_rate = NA
+ host_acceptance_rate mean = 0.94704225
+ ----------------------------
+Node 318: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.147        26.95        0.000    
+ price mean = 5.14652
+ ----------------------------
+Node 319: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.589        80.37        0.000    
+ price mean = 4.58888
+ ----------------------------
+Node 5: Intermediate node
+ A case goes into Node 10 if reviews_per_month <= 1.6050000 or NA
+ reviews_per_month mean = 1.9864620
+ ----------------------------
+Node 10: Intermediate node
+ A case goes into Node 20 if bathrooms <= 1.2500000 or NA
+ bathrooms mean = 1.2956790
+ ----------------------------
+Node 20: Intermediate node
+ A case goes into Node 40 if review_scores_rating <= 4.8450000
+ review_scores_rating mean = 4.7364524
+ ----------------------------
+Node 40: Intermediate node
+ A case goes into Node 80 if minimum_nights <= 4.5000000
+ minimum_nights mean = 16.000000
+ ----------------------------
+Node 80: Intermediate node
+ A case goes into Node 160 if maximum_nights <= 927.50000
+ maximum_nights mean = 456.78125
+ ----------------------------
+Node 160: Intermediate node
+ A case goes into Node 320 if maximum_nights <= 29.500000
+ maximum_nights mean = 195.30435
+ ----------------------------
+Node 320: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.931        36.95        0.000    
+ price mean = 4.93141
+ ----------------------------
+Node 321: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.676        55.53        0.000    
+ price mean = 4.67568
+ ----------------------------
+Node 161: Intermediate node
+ A case goes into Node 322 if minimum_nights <= 1.5000000
+ minimum_nights mean = 1.9259259
+ ----------------------------
+Node 322: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.204        18.14        0.000    
+ price mean = 5.20415
+ ----------------------------
+Node 323: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.789        62.80        0.000    
+ price mean = 4.78942
+ ----------------------------
+Node 81: Intermediate node
+ A case goes into Node 162 if review_scores_rating <= 4.7700000
+ review_scores_rating mean = 4.4154167
+ ----------------------------
+Node 162: Intermediate node
+ A case goes into Node 324 if review_scores_rating <= 4.6150000
+ review_scores_rating mean = 4.2912727
+ ----------------------------
+Node 324: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.404        60.59        0.000    
+ price mean = 4.40364
+ ----------------------------
+Node 325: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.698        41.75        0.000    
+ price mean = 4.69839
+ ----------------------------
+Node 163: Intermediate node
+ A case goes into Node 326 if review_scores_rating <= 4.8050000
+ review_scores_rating mean = 4.8170588
+ ----------------------------
+Node 326: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.132        12.41        0.000    
+ price mean = 4.13204
+ ----------------------------
+Node 327: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.406        25.78        0.000    
+ price mean = 4.40574
+ ----------------------------
+Node 41: Intermediate node
+ A case goes into Node 82 if host_is_superhost = "f"
+ host_is_superhost mode = "f"
+ ----------------------------
+Node 82: Intermediate node
+ A case goes into Node 164 if maximum_nights <= 865.00000
+ maximum_nights mean = 525.17695
+ ----------------------------
+Node 164: Intermediate node
+ A case goes into Node 328 if instant_bookable = "f"
+ instant_bookable mode = "f"
+ ----------------------------
+Node 328: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.748        93.04        0.000    
+ price mean = 4.74815
+ ----------------------------
+Node 329: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.816        77.64        0.000    
+ price mean = 4.81561
+ ----------------------------
+Node 165: Intermediate node
+ A case goes into Node 330 if instant_bookable = "f"
+ instant_bookable mode = "f"
+ ----------------------------
+Node 330: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.044        84.29        0.000    
+ price mean = 5.04380
+ ----------------------------
+Node 331: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.457        31.60        0.000    
+ price mean = 5.45720
+ ----------------------------
+Node 83: Intermediate node
+ A case goes into Node 166 if minimum_nights <= 2.5000000
+ minimum_nights mean = 24.674847
+ ----------------------------
+Node 166: Intermediate node
+ A case goes into Node 332 if accommodates <= 3.5000000
+ accommodates mean = 3.7352941
+ ----------------------------
+Node 332: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.754        16.13        0.000    
+ price mean = 4.75352
+ ----------------------------
+Node 333: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.093        51.61        0.000    
+ price mean = 5.09266
+ ----------------------------
+Node 167: Intermediate node
+ A case goes into Node 334 if minimum_nights <= 46.500000
+ minimum_nights mean = 30.728682
+ ----------------------------
+Node 334: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.755        99.05        0.000    
+ price mean = 4.75531
+ ----------------------------
+Node 335: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.037        168.4        0.000    
+ price mean = 5.03699
+ ----------------------------
+Node 21: Intermediate node
+ A case goes into Node 42 if accommodates <= 3.5000000
+ accommodates mean = 3.9156118
+ ----------------------------
+Node 42: Intermediate node
+ A case goes into Node 84 if maximum_nights <= 108.00000
+ maximum_nights mean = 420.35000
+ ----------------------------
+Node 84: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.191        26.19        0.000    
+ price mean = 4.19053
+ ----------------------------
+Node 85: Intermediate node
+ A case goes into Node 170 if number_of_reviews <= 8.5000000
+ number_of_reviews mean = 19.250000
+ ----------------------------
+Node 170: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.732        19.76        0.000    
+ price mean = 4.73200
+ ----------------------------
+Node 171: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.482        23.66        0.000    
+ price mean = 4.48165
+ ----------------------------
+Node 43: Intermediate node
+ A case goes into Node 86 if beds <= 2.5000000
+ beds mean = 2.1574074
+ ----------------------------
+Node 86: Intermediate node
+ A case goes into Node 172 if reviews_per_month <= 0.10500000 or NA
+ reviews_per_month mean = 0.53879630
+ ----------------------------
+Node 172: Intermediate node
+ A case goes into Node 344 if host_acceptance_rate <= 0.95000000
+ host_acceptance_rate mean = 0.83271739
+ ----------------------------
+Node 344: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.330        115.7        0.000    
+ price mean = 5.32971
+ ----------------------------
+Node 345: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.162        100.7        0.000    
+ price mean = 5.16176
+ ----------------------------
+Node 173: Intermediate node
+ A case goes into Node 346 if minimum_nights <= 4.0000000
+ minimum_nights mean = 14.833333
+ ----------------------------
+Node 346: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.216        71.01        0.000    
+ price mean = 5.21584
+ ----------------------------
+Node 347: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.994        58.37        0.000    
+ price mean = 4.99393
+ ----------------------------
+Node 87: Intermediate node
+ A case goes into Node 174 if review_scores_rating <= 4.7100000
+ review_scores_rating mean = 4.7416667
+ ----------------------------
+Node 174: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.203        15.99        0.000    
+ price mean = 4.20285
+ ----------------------------
+Node 175: Intermediate node
+ A case goes into Node 350 if minimum_nights <= 2.5000000
+ minimum_nights mean = 21.958333
+ ----------------------------
+Node 350: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.646        25.34        0.000    
+ price mean = 5.64617
+ ----------------------------
+Node 351: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.014        35.07        0.000    
+ price mean = 5.01430
+ ----------------------------
+Node 11: Intermediate node
+ A case goes into Node 22 if review_scores_rating <= 4.9050000
+ review_scores_rating mean = 4.8041187
+ ----------------------------
+Node 22: Intermediate node
+ A case goes into Node 44 if maximum_nights <= 1124.5000
+ maximum_nights mean = 432.19328
+ ----------------------------
+Node 44: Intermediate node
+ A case goes into Node 88 if minimum_nights <= 2.5000000
+ minimum_nights mean = 3.0634328
+ ----------------------------
+Node 88: Intermediate node
+ A case goes into Node 176 if minimum_nights <= 1.5000000
+ minimum_nights mean = 1.5517241
+ ----------------------------
+Node 176: Intermediate node
+ A case goes into Node 352 if host_acceptance_rate <= 0.91500000
+ host_acceptance_rate mean = 0.95883495
+ ----------------------------
+Node 352: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.015        135.3        0.000    
+ price mean = 4.01496
+ ----------------------------
+Node 353: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.352        92.27        0.000    
+ price mean = 4.35215
+ ----------------------------
+Node 177: Intermediate node
+ A case goes into Node 354 if beds <= 1.5000000
+ beds mean = 1.7968750
+ ----------------------------
+Node 354: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 3.844        34.34        0.000    
+ price mean = 3.84386
+ ----------------------------
+Node 355: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.550        134.2        0.000    
+ price mean = 4.54951
+ ----------------------------
+Node 89: Intermediate node
+ A case goes into Node 178 if minimum_nights <= 31.500000
+ minimum_nights mean = 12.805556
+ ----------------------------
+Node 178: Intermediate node
+ A case goes into Node 356 if reviews_per_month <= 2.7550000
+ reviews_per_month mean = 2.4376000
+ ----------------------------
+Node 356: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.819        59.32        0.000    
+ price mean = 4.81886
+ ----------------------------
+Node 357: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.454        56.73        0.000    
+ price mean = 4.45388
+ ----------------------------
+Node 179: Intermediate node
+ A case goes into Node 358 if number_of_reviews <= 184.00000
+ number_of_reviews mean = 179.54545
+ ----------------------------
+Node 358: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.267        24.56        0.000    
+ price mean = 4.26665
+ ----------------------------
+Node 359: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.080        40.28        0.000    
+ price mean = 4.08021
+ ----------------------------
+Node 45: Intermediate node
+ A case goes into Node 90 if reviews_per_month <= 2.2350000
+ reviews_per_month mean = 3.2780899
+ ----------------------------
+Node 90: Intermediate node
+ A case goes into Node 180 if number_of_reviews <= 100.00000
+ number_of_reviews mean = 86.950000
+ ----------------------------
+Node 180: Intermediate node
+ A case goes into Node 360 if review_scores_rating <= 4.7250000
+ review_scores_rating mean = 4.6815385
+ ----------------------------
+Node 360: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.678        38.88        0.000    
+ price mean = 4.67824
+ ----------------------------
+Node 361: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.890        46.32        0.000    
+ price mean = 4.89049
+ ----------------------------
+Node 181: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.983        39.54        0.000    
+ price mean = 4.98278
+ ----------------------------
+Node 91: Intermediate node
+ A case goes into Node 182 if minimum_nights <= 4.0000000
+ minimum_nights mean = 3.5942029
+ ----------------------------
+Node 182: Intermediate node
+ A case goes into Node 364 if host_is_superhost = "t"
+ host_is_superhost mode = "t"
+ ----------------------------
+Node 364: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.486        124.5        0.000    
+ price mean = 4.48580
+ ----------------------------
+Node 365: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.804        47.59        0.000    
+ price mean = 4.80354
+ ----------------------------
+Node 183: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.285        43.76        0.000    
+ price mean = 4.28485
+ ----------------------------
+Node 23: Intermediate node
+ A case goes into Node 46 if review_scores_rating <= 4.9450000
+ review_scores_rating mean = 4.9600503
+ ----------------------------
+Node 46: Intermediate node
+ A case goes into Node 92 if reviews_per_month <= 1.8000000
+ reviews_per_month mean = 3.2173973
+ ----------------------------
+Node 92: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.957        41.38        0.000    
+ price mean = 4.95696
+ ----------------------------
+Node 93: Intermediate node
+ A case goes into Node 186 if bathrooms <= 1.5000000
+ bathrooms mean = 1.1119403
+ ----------------------------
+Node 186: Intermediate node
+ A case goes into Node 372 if number_of_reviews <= 93.000000
+ number_of_reviews mean = 124.25000
+ ----------------------------
+Node 372: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.664        111.9        0.000    
+ price mean = 4.66358
+ ----------------------------
+Node 373: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.548        85.29        0.000    
+ price mean = 4.54785
+ ----------------------------
+Node 187: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.802        26.91        0.000    
+ price mean = 4.80178
+ ----------------------------
+Node 47: Intermediate node
+ A case goes into Node 94 if accommodates <= 3.5000000
+ accommodates mean = 3.7936508
+ ----------------------------
+Node 94: Intermediate node
+ A case goes into Node 188 if review_scores_rating <= 4.9950000
+ review_scores_rating mean = 4.9830769
+ ----------------------------
+Node 188: Intermediate node
+ A case goes into Node 376 if reviews_per_month <= 3.6300000
+ reviews_per_month mean = 3.7221429
+ ----------------------------
+Node 376: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.831        54.53        0.000    
+ price mean = 4.83093
+ ----------------------------
+Node 377: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.644        58.97        0.000    
+ price mean = 4.64354
+ ----------------------------
+Node 189: Intermediate node
+ A case goes into Node 378 if host_is_superhost = "f"
+ host_is_superhost mode = "f"
+ ----------------------------
+Node 378: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.161        15.48        0.000    
+ price mean = 4.16081
+ ----------------------------
+Node 379: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.637        42.57        0.000    
+ price mean = 4.63696
+ ----------------------------
+Node 95: Intermediate node
+ A case goes into Node 190 if review_scores_rating <= 4.9650000
+ review_scores_rating mean = 4.9792000
+ ----------------------------
+Node 190: Intermediate node
+ A case goes into Node 380 if host_acceptance_rate <= 0.95000000 or NA
+ host_acceptance_rate mean = 0.95781250
+ ----------------------------
+Node 380: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.935        45.92        0.000    
+ price mean = 4.93456
+ ----------------------------
+Node 381: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.698        78.97        0.000    
+ price mean = 4.69841
+ ----------------------------
+Node 191: Intermediate node
+ A case goes into Node 382 if host_is_superhost = "f"
+ host_is_superhost mode = "t"
+ ----------------------------
+Node 382: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.732        42.89        0.000    
+ price mean = 4.73181
+ ----------------------------
+Node 383: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.906        107.3        0.000    
+ price mean = 4.90553
+ ----------------------------
+Node 3: Intermediate node
+ A case goes into Node 6 if bathrooms <= 2.2500000 or NA
+ bathrooms mean = 1.9053030
+ ----------------------------
+Node 6: Intermediate node
+ A case goes into Node 12 if bathrooms <= 1.2500000
+ bathrooms mean = 1.4810319
+ ----------------------------
+Node 12: Intermediate node
+ A case goes into Node 24 if reviews_per_month <= 1.7400000 or NA
+ reviews_per_month mean = 2.2722642
+ ----------------------------
+Node 24: Intermediate node
+ A case goes into Node 48 if reviews_per_month <= 0.77500000 or NA
+ reviews_per_month mean = 0.97284444
+ ----------------------------
+Node 48: Intermediate node
+ A case goes into Node 96 if minimum_nights <= 2.5000000
+ minimum_nights mean = 19.378571
+ ----------------------------
+Node 96: Intermediate node
+ A case goes into Node 192 if minimum_nights <= 1.5000000
+ minimum_nights mean = 1.5531915
+ ----------------------------
+Node 192: Intermediate node
+ A case goes into Node 384 if host_acceptance_rate <= 0.99500000
+ host_acceptance_rate mean = 0.92368421
+ ----------------------------
+Node 384: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.484        37.94        0.000    
+ price mean = 5.48364
+ ----------------------------
+Node 385: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.110        29.62        0.000    
+ price mean = 5.11020
+ ----------------------------
+Node 193: Intermediate node
+ A case goes into Node 386 if number_of_reviews <= 5.0000000
+ number_of_reviews mean = 6.5384615
+ ----------------------------
+Node 386: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.927        62.03        0.000    
+ price mean = 4.92675
+ ----------------------------
+Node 387: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.576        37.38        0.000    
+ price mean = 5.57612
+ ----------------------------
+Node 97: Intermediate node
+ A case goes into Node 194 if reviews_per_month <= 0.23500000 or NA
+ reviews_per_month mean = 0.37543860
+ ----------------------------
+Node 194: Intermediate node
+ A case goes into Node 388 if host_acceptance_rate <= 0.94500000 or NA
+ host_acceptance_rate mean = 0.79809524
+ ----------------------------
+Node 388: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.066        49.27        0.000    
+ price mean = 5.06570
+ ----------------------------
+Node 389: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.759        78.25        0.000    
+ price mean = 4.75865
+ ----------------------------
+Node 195: Intermediate node
+ A case goes into Node 390 if accommodates <= 5.5000000
+ accommodates mean = 6.4615385
+ ----------------------------
+Node 390: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.534        23.95        0.000    
+ price mean = 4.53422
+ ----------------------------
+Node 391: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.783        56.40        0.000    
+ price mean = 4.78271
+ ----------------------------
+Node 49: Intermediate node
+ A case goes into Node 98 if host_response_rate = NA
+ host_response_rate mean = 0.98111111
+ ----------------------------
+Node 98: Intermediate node
+ A case goes into Node 196 if minimum_nights <= 2.5000000
+ minimum_nights mean = 19.388889
+ ----------------------------
+Node 196: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.356        4.838        0.000    
+ price mean = 6.35575
+ ----------------------------
+Node 197: Intermediate node
+ A case goes into Node 394 if reviews_per_month <= 1.2900000
+ reviews_per_month mean = 1.2400000
+ ----------------------------
+Node 394: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.404        70.83        0.000    
+ price mean = 5.40412
+ ----------------------------
+Node 395: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.072        33.22        0.000    
+ price mean = 5.07250
+ ----------------------------
+Node 99: Intermediate node
+ A case goes into Node 198 if review_scores_rating <= 4.8550000
+ review_scores_rating mean = 4.7811905
+ ----------------------------
+Node 198: Intermediate node
+ A case goes into Node 396 if review_scores_rating <= 4.5950000
+ review_scores_rating mean = 4.6552113
+ ----------------------------
+Node 396: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.666        55.70        0.000    
+ price mean = 4.66584
+ ----------------------------
+Node 397: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.929        80.48        0.000    
+ price mean = 4.92948
+ ----------------------------
+Node 199: Intermediate node
+ A case goes into Node 398 if maximum_nights <= 110.00000
+ maximum_nights mean = 492.14545
+ ----------------------------
+Node 398: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.208        63.43        0.000    
+ price mean = 5.20829
+ ----------------------------
+Node 399: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.981        80.23        0.000    
+ price mean = 4.98108
+ ----------------------------
+Node 25: Intermediate node
+ A case goes into Node 50 if review_scores_rating <= 4.8650000
+ review_scores_rating mean = 4.8185196
+ ----------------------------
+Node 50: Intermediate node
+ A case goes into Node 100 if host_is_superhost = "f"
+ host_is_superhost mode = "f"
+ ----------------------------
+Node 100: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.590        124.9        0.000    
+ price mean = 4.59031
+ ----------------------------
+Node 101: Intermediate node
+ A case goes into Node 202 if host_acceptance_rate <= 0.99500000
+ host_acceptance_rate mean = 0.96771739
+ ----------------------------
+Node 202: Intermediate node
+ A case goes into Node 404 if number_of_reviews <= 93.500000
+ number_of_reviews mean = 109.94444
+ ----------------------------
+Node 404: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.456        72.01        0.000    
+ price mean = 4.45628
+ ----------------------------
+Node 405: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.878        94.69        0.000    
+ price mean = 4.87799
+ ----------------------------
+Node 203: Intermediate node
+ A case goes into Node 406 if number_of_reviews <= 34.000000
+ number_of_reviews mean = 129.60526
+ ----------------------------
+Node 406: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.970        52.41        0.000    
+ price mean = 4.97049
+ ----------------------------
+Node 407: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.652        83.27        0.000    
+ price mean = 4.65187
+ ----------------------------
+Node 51: Intermediate node
+ A case goes into Node 102 if reviews_per_month <= 4.1450000
+ reviews_per_month mean = 3.1429586
+ ----------------------------
+Node 102: Intermediate node
+ A case goes into Node 204 if beds <= 3.5000000
+ beds mean = 3.1617647
+ ----------------------------
+Node 204: Intermediate node
+ A case goes into Node 408 if number_of_reviews <= 7.5000000
+ number_of_reviews mean = 91.790000
+ ----------------------------
+Node 408: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.636        43.25        0.000    
+ price mean = 4.63598
+ ----------------------------
+Node 409: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.898        116.7        0.000    
+ price mean = 4.89797
+ ----------------------------
+Node 205: Intermediate node
+ A case goes into Node 410 if review_scores_rating <= 4.9150000
+ review_scores_rating mean = 4.9575000
+ ----------------------------
+Node 410: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.930        47.98        0.000    
+ price mean = 4.93016
+ ----------------------------
+Node 411: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.080        66.84        0.000    
+ price mean = 5.07983
+ ----------------------------
+Node 103: Intermediate node
+ A case goes into Node 206 if minimum_nights <= 1.5000000
+ minimum_nights mean = 1.6060606
+ ----------------------------
+Node 206: Intermediate node
+ A case goes into Node 412 if number_of_reviews <= 37.000000
+ number_of_reviews mean = 131.26667
+ ----------------------------
+Node 412: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.411        48.05        0.000    
+ price mean = 4.41092
+ ----------------------------
+Node 413: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.671        74.30        0.000    
+ price mean = 4.67142
+ ----------------------------
+Node 207: Intermediate node
+ A case goes into Node 414 if number_of_reviews <= 197.50000
+ number_of_reviews mean = 199.11111
+ ----------------------------
+Node 414: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.784        68.44        0.000    
+ price mean = 4.78383
+ ----------------------------
+Node 415: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.023        69.27        0.000    
+ price mean = 5.02254
+ ----------------------------
+Node 13: Intermediate node
+ A case goes into Node 26 if accommodates <= 7.5000000
+ accommodates mean = 7.2850812
+ ----------------------------
+Node 26: Intermediate node
+ A case goes into Node 52 if maximum_nights <= 452.50000
+ maximum_nights mean = 518.64858
+ ----------------------------
+Node 52: Intermediate node
+ A case goes into Node 104 if reviews_per_month <= 1.5950000
+ reviews_per_month mean = 2.3228287
+ ----------------------------
+Node 104: Intermediate node
+ A case goes into Node 208 if host_acceptance_rate <= 0.99500000 or NA
+ host_acceptance_rate mean = 0.94252747
+ ----------------------------
+Node 208: Intermediate node
+ A case goes into Node 416 if instant_bookable = "f"
+ instant_bookable mode = "f"
+ ----------------------------
+Node 416: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.302        68.36        0.000    
+ price mean = 5.30210
+ ----------------------------
+Node 417: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.494        54.65        0.000    
+ price mean = 5.49403
+ ----------------------------
+Node 209: Intermediate node
+ A case goes into Node 418 if maximum_nights <= 190.00000
+ maximum_nights mean = 264.50000
+ ----------------------------
+Node 418: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.274        51.08        0.000    
+ price mean = 5.27399
+ ----------------------------
+Node 419: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.078        63.06        0.000    
+ price mean = 5.07819
+ ----------------------------
+Node 105: Intermediate node
+ A case goes into Node 210 if review_scores_rating <= 4.8650000
+ review_scores_rating mean = 4.8319108
+ ----------------------------
+Node 210: Intermediate node
+ A case goes into Node 420 if minimum_nights <= 1.5000000
+ minimum_nights mean = 3.0000000
+ ----------------------------
+Node 420: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.548        38.36        0.000    
+ price mean = 4.54824
+ ----------------------------
+Node 421: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.016        81.38        0.000    
+ price mean = 5.01621
+ ----------------------------
+Node 211: Intermediate node
+ A case goes into Node 422 if instant_bookable = "t"
+ instant_bookable mode = "t"
+ ----------------------------
+Node 422: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.148        120.5        0.000    
+ price mean = 5.14809
+ ----------------------------
+Node 423: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.163        67.54        0.000    
+ price mean = 5.16346
+ ----------------------------
+Node 53: Intermediate node
+ A case goes into Node 106 if review_scores_rating <= 4.4500000 or NA
+ review_scores_rating mean = 4.8070248
+ ----------------------------
+Node 106: Intermediate node
+ A case goes into Node 212 if host_response_rate = NA
+ host_response_rate mean = 0.99500000
+ ----------------------------
+Node 212: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.270        36.89        0.000    
+ price mean = 5.26952
+ ----------------------------
+Node 213: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.885        26.63        0.000    
+ price mean = 4.88530
+ ----------------------------
+Node 107: Intermediate node
+ A case goes into Node 214 if bathrooms <= 1.7500000
+ bathrooms mean = 1.9217391
+ ----------------------------
+Node 214: Intermediate node
+ A case goes into Node 428 if reviews_per_month <= 0.90500000
+ reviews_per_month mean = 1.4083333
+ ----------------------------
+Node 428: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.522        75.35        0.000    
+ price mean = 5.52167
+ ----------------------------
+Node 429: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.039        108.4        0.000    
+ price mean = 5.03925
+ ----------------------------
+Node 215: Intermediate node
+ A case goes into Node 430 if host_acceptance_rate <= 0.98500000 or NA
+ host_acceptance_rate mean = 0.95688172
+ ----------------------------
+Node 430: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.187        96.25        0.000    
+ price mean = 5.18707
+ ----------------------------
+Node 431: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.413        91.13        0.000    
+ price mean = 5.41302
+ ----------------------------
+Node 27: Intermediate node
+ A case goes into Node 54 if review_scores_rating <= 4.9150000
+ review_scores_rating mean = 4.8107273
+ ----------------------------
+Node 54: Intermediate node
+ A case goes into Node 108 if reviews_per_month <= 1.1300000
+ reviews_per_month mean = 2.3214583
+ ----------------------------
+Node 108: Intermediate node
+ A case goes into Node 216 if accommodates <= 8.5000000
+ accommodates mean = 9.3076923
+ ----------------------------
+Node 216: Intermediate node
+ A case goes into Node 432 if reviews_per_month <= 0.68000000
+ reviews_per_month mean = 0.63666667
+ ----------------------------
+Node 432: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.393        45.85        0.000    
+ price mean = 5.39255
+ ----------------------------
+Node 433: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.423        70.11        0.000    
+ price mean = 5.42297
+ ----------------------------
+Node 217: Intermediate node
+ A case goes into Node 434 if number_of_reviews <= 7.0000000
+ number_of_reviews mean = 26.000000
+ ----------------------------
+Node 434: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.494        16.89        0.000    
+ price mean = 5.49369
+ ----------------------------
+Node 435: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.918        47.14        0.000    
+ price mean = 5.91761
+ ----------------------------
+Node 109: Intermediate node
+ A case goes into Node 218 if minimum_nights <= 2.5000000
+ minimum_nights mean = 2.9661017
+ ----------------------------
+Node 218: Intermediate node
+ A case goes into Node 436 if reviews_per_month <= 3.4850000
+ reviews_per_month mean = 2.7655208
+ ----------------------------
+Node 436: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.379        104.7        0.000    
+ price mean = 5.37864
+ ----------------------------
+Node 437: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.076        68.67        0.000    
+ price mean = 5.07610
+ ----------------------------
+Node 219: Intermediate node
+ A case goes into Node 438 if reviews_per_month <= 1.8550000
+ reviews_per_month mean = 2.3613636
+ ----------------------------
+Node 438: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 4.904        74.10        0.000    
+ price mean = 4.90397
+ ----------------------------
+Node 439: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.020        53.56        0.000    
+ price mean = 5.01953
+ ----------------------------
+Node 55: Intermediate node
+ A case goes into Node 110 if beds <= 2.5000000
+ beds mean = 4.5779817
+ ----------------------------
+Node 110: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.246        30.90        0.000    
+ price mean = 6.24613
+ ----------------------------
+Node 111: Intermediate node
+ A case goes into Node 222 if beds <= 6.5000000
+ beds mean = 4.8100000
+ ----------------------------
+Node 222: Intermediate node
+ A case goes into Node 444 if host_is_superhost = "f"
+ host_is_superhost mode = "t"
+ ----------------------------
+Node 444: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.489        48.73        0.000    
+ price mean = 5.48928
+ ----------------------------
+Node 445: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.594        73.08        0.000    
+ price mean = 5.59415
+ ----------------------------
+Node 223: Intermediate node
+ A case goes into Node 446 if number_of_reviews <= 43.500000
+ number_of_reviews mean = 45.583333
+ ----------------------------
+Node 446: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.107        37.77        0.000    
+ price mean = 6.10667
+ ----------------------------
+Node 447: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.738        26.08        0.000    
+ price mean = 5.73812
+ ----------------------------
+Node 7: Intermediate node
+ A case goes into Node 14 if accommodates <= 11.500000
+ accommodates mean = 10.723618
+ ----------------------------
+Node 14: Intermediate node
+ A case goes into Node 28 if bathrooms <= 3.2500000
+ bathrooms mean = 2.9511628
+ ----------------------------
+Node 28: Intermediate node
+ A case goes into Node 56 if reviews_per_month <= 3.3300000 or NA
+ reviews_per_month mean = 1.8083571
+ ----------------------------
+Node 56: Intermediate node
+ A case goes into Node 112 if review_scores_rating <= 4.9250000 or NA
+ review_scores_rating mean = 4.8181148
+ ----------------------------
+Node 112: Intermediate node
+ A case goes into Node 224 if bathrooms <= 2.7500000
+ bathrooms mean = 2.7402597
+ ----------------------------
+Node 224: Intermediate node
+ A case goes into Node 448 if reviews_per_month <= 1.4150000 or NA
+ reviews_per_month mean = 1.4096552
+ ----------------------------
+Node 448: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.666        63.08        0.000    
+ price mean = 5.66599
+ ----------------------------
+Node 449: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.245        44.55        0.000    
+ price mean = 5.24457
+ ----------------------------
+Node 225: Intermediate node
+ A case goes into Node 450 if review_scores_rating <= 4.8550000 or NA
+ review_scores_rating mean = 4.6558333
+ ----------------------------
+Node 450: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.597        67.99        0.000    
+ price mean = 5.59734
+ ----------------------------
+Node 451: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.952        30.00        0.000    
+ price mean = 5.95165
+ ----------------------------
+Node 113: Intermediate node
+ A case goes into Node 226 if beds <= 5.5000000
+ beds mean = 4.0144928
+ ----------------------------
+Node 226: Intermediate node
+ A case goes into Node 452 if reviews_per_month <= 0.92000000
+ reviews_per_month mean = 1.5278333
+ ----------------------------
+Node 452: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.034        47.05        0.000    
+ price mean = 6.03438
+ ----------------------------
+Node 453: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.745        94.09        0.000    
+ price mean = 5.74489
+ ----------------------------
+Node 227: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.734        19.18        0.000    
+ price mean = 5.73382
+ ----------------------------
+Node 57: Intermediate node
+ A case goes into Node 114 if beds <= 4.5000000
+ beds mean = 4.6111111
+ ----------------------------
+Node 114: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.236        46.85        0.000    
+ price mean = 5.23618
+ ----------------------------
+Node 115: Intermediate node
+ A case goes into Node 230 if maximum_nights <= 745.00000
+ maximum_nights mean = 712.50000
+ ----------------------------
+Node 230: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.533        49.33        0.000    
+ price mean = 5.53331
+ ----------------------------
+Node 231: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.261        24.31        0.000    
+ price mean = 5.26110
+ ----------------------------
+Node 29: Intermediate node
+ A case goes into Node 58 if reviews_per_month <= 0.84500000
+ reviews_per_month mean = 1.2352778
+ ----------------------------
+Node 58: Intermediate node
+ A case goes into Node 116 if accommodates <= 9.0000000
+ accommodates mean = 8.5384615
+ ----------------------------
+Node 116: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.555        30.22        0.000    
+ price mean = 6.55474
+ ----------------------------
+Node 117: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.733        63.40        0.000    
+ price mean = 6.73269
+ ----------------------------
+Node 59: Intermediate node
+ A case goes into Node 118 if reviews_per_month <= 2.4700000 or NA
+ reviews_per_month mean = 1.6669565
+ ----------------------------
+Node 118: Intermediate node
+ A case goes into Node 236 if host_is_superhost = "f"
+ host_is_superhost mode = "f"
+ ----------------------------
+Node 236: Intermediate node
+ A case goes into Node 472 if beds <= 5.5000000
+ beds mean = 4.8181818
+ ----------------------------
+Node 472: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.136        32.08        0.000    
+ price mean = 6.13650
+ ----------------------------
+Node 473: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.177        30.81        0.000    
+ price mean = 6.17745
+ ----------------------------
+Node 237: Intermediate node
+ A case goes into Node 474 if beds <= 4.5000000
+ beds mean = 4.9090909
+ ----------------------------
+Node 474: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.534        51.39        0.000    
+ price mean = 6.53440
+ ----------------------------
+Node 475: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.884        30.20        0.000    
+ price mean = 5.88431
+ ----------------------------
+Node 119: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.650        45.82        0.000    
+ price mean = 5.64994
+ ----------------------------
+Node 15: Intermediate node
+ A case goes into Node 30 if reviews_per_month <= 0.50000000 or NA
+ reviews_per_month mean = 1.8031469
+ ----------------------------
+Node 30: Intermediate node
+ A case goes into Node 60 if minimum_nights <= 1.5000000
+ minimum_nights mean = 12.269841
+ ----------------------------
+Node 60: Intermediate node
+ A case goes into Node 120 if beds <= 5.0000000
+ beds mean = 6.1875000
+ ----------------------------
+Node 120: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.777        95.02        0.000    
+ price mean = 6.77676
+ ----------------------------
+Node 121: Intermediate node
+ A case goes into Node 242 if bathrooms <= 3.7500000
+ bathrooms mean = 4.0500000
+ ----------------------------
+Node 242: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.406        18.83        0.000    
+ price mean = 6.40615
+ ----------------------------
+Node 243: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.914        24.23        0.000    
+ price mean = 5.91426
+ ----------------------------
+Node 61: Intermediate node
+ A case goes into Node 122 if maximum_nights <= 547.50000
+ maximum_nights mean = 584.31915
+ ----------------------------
+Node 122: Intermediate node
+ A case goes into Node 244 if beds <= 5.0000000
+ beds mean = 5.6562500
+ ----------------------------
+Node 244: Intermediate node
+ A case goes into Node 488 if beds <= 3.5000000
+ beds mean = 3.3846154
+ ----------------------------
+Node 488: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.947        35.34        0.000    
+ price mean = 6.94653
+ ----------------------------
+Node 489: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 7.444        110.8        0.000    
+ price mean = 7.44382
+ ----------------------------
+Node 245: Intermediate node
+ A case goes into Node 490 if accommodates <= 13.000000
+ accommodates mean = 13.947368
+ ----------------------------
+Node 490: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.694        28.13        0.000    
+ price mean = 6.69355
+ ----------------------------
+Node 491: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.997        48.05        0.000    
+ price mean = 6.99686
+ ----------------------------
+Node 123: Intermediate node
+ A case goes into Node 246 if number_of_reviews <= 4.5000000
+ number_of_reviews mean = 7.6000000
+ ----------------------------
+Node 246: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.739        22.11        0.000    
+ price mean = 6.73923
+ ----------------------------
+Node 247: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 7.034        49.54        0.000    
+ price mean = 7.03387
+ ----------------------------
+Node 31: Intermediate node
+ A case goes into Node 62 if host_is_superhost = "t"
+ host_is_superhost mode = "t"
+ ----------------------------
+Node 62: Intermediate node
+ A case goes into Node 124 if beds <= 6.5000000
+ beds mean = 7.4615385
+ ----------------------------
+Node 124: Intermediate node
+ A case goes into Node 248 if host_acceptance_rate <= 0.99500000
+ host_acceptance_rate mean = 0.97218750
+ ----------------------------
+Node 248: Intermediate node
+ A case goes into Node 496 if host_acceptance_rate <= 0.98500000
+ host_acceptance_rate mean = 0.95954545
+ ----------------------------
+Node 496: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.914        69.36        0.000    
+ price mean = 5.91396
+ ----------------------------
+Node 497: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.574        17.69        0.000    
+ price mean = 5.57405
+ ----------------------------
+Node 249: Intermediate node
+ A case goes into Node 498 if review_scores_rating <= 4.9000000
+ review_scores_rating mean = 4.8850000
+ ----------------------------
+Node 498: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.777        38.08        0.000    
+ price mean = 5.77683
+ ----------------------------
+Node 499: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.451        16.56        0.000    
+ price mean = 6.45061
+ ----------------------------
+Node 125: Intermediate node
+ A case goes into Node 250 if host_acceptance_rate <= 0.98500000
+ host_acceptance_rate mean = 0.97282609
+ ----------------------------
+Node 250: Intermediate node
+ A case goes into Node 500 if reviews_per_month <= 1.8500000
+ reviews_per_month mean = 1.7864706
+ ----------------------------
+Node 500: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.492        74.24        0.000    
+ price mean = 6.49177
+ ----------------------------
+Node 501: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.255        47.33        0.000    
+ price mean = 6.25479
+ ----------------------------
+Node 251: Intermediate node
+ A case goes into Node 502 if review_scores_rating <= 4.9750000
+ review_scores_rating mean = 4.9189655
+ ----------------------------
+Node 502: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.053        82.95        0.000    
+ price mean = 6.05259
+ ----------------------------
+Node 503: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.661        43.33        0.000    
+ price mean = 6.66145
+ ----------------------------
+Node 63: Intermediate node
+ A case goes into Node 126 if review_scores_rating <= 4.6850000
+ review_scores_rating mean = 4.7864286
+ ----------------------------
+Node 126: Intermediate node
+ A case goes into Node 252 if accommodates <= 13.000000
+ accommodates mean = 13.923077
+ ----------------------------
+Node 252: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.240        23.98        0.000    
+ price mean = 5.24033
+ ----------------------------
+Node 253: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.493        25.77        0.000    
+ price mean = 5.49298
+ ----------------------------
+Node 127: Intermediate node
+ A case goes into Node 254 if number_of_reviews <= 10.500000
+ number_of_reviews mean = 49.620690
+ ----------------------------
+Node 254: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.844        84.21        0.000    
+ price mean = 5.84392
+ ----------------------------
+Node 255: Intermediate node
+ A case goes into Node 510 if reviews_per_month <= 1.7300000
+ reviews_per_month mean = 1.7820000
+ ----------------------------
+Node 510: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 6.548        45.96        0.000    
+ price mean = 6.54846
+ ----------------------------
+Node 511: Terminal node
+ Coefficients of least squares regression function:
+ Regressor               Coefficient  t-stat      p-value
+ Constant                 5.893        49.55        0.000    
+ price mean = 5.89329
+ ----------------------------
+ ******************************************************
+ Variables used for splitting or fitting:
+ accommodates
+ bathrooms
+ beds
+ host_acceptance_rate
+ host_is_superhost
+ host_response_rate
+ instant_bookable
+ maximum_nights
+ minimum_nights
+ number_of_reviews
+ review_scores_rating
+ reviews_per_month
+ 
+ Number of terminal nodes: 187
+ 
+ Scaled importance scores of predictor variables
+      Score     Rank  Variable
+  1.066E+02     1.00  accommodates
+  6.816E+01     2.00  beds
+  6.472E+01     3.00  bathrooms
+  2.453E+01     4.00  review_scores_rating
+  1.635E+01     5.00  maximum_nights
+  1.578E+01     6.00  reviews_per_month
+  1.012E+01     7.00  number_of_reviews
+  6.899E+00     8.00  minimum_nights
+  6.252E+00     9.00  host_acceptance_rate
+  4.243E+00    10.00  host_response_rate
+  3.819E+00    11.00  host_is_superhost
+  2.224E+00    12.00  instant_bookable
+  1.470E+00    13.00  has_availability
+ 99% threshold is 1.2909
+ 95% threshold is 1.0000
+ 90% threshold is 0.8593
+ 80% threshold is 0.7722
+ 50% threshold is 0.5962
+ Number of variables above 99% threshold is 13
+ Number of variables between 95% and 99% thresholds is 0
+ Number of variables between 90% and 95% thresholds is 0
+ Number of variables between 80% and 90% thresholds is 0
+ Number of variables between 50% and 80% thresholds is 0
+ Number of variables below 50% threshold (excluding F, I and R variables) is 0
+ Importance scores are stored in importance.txt
+ Elapsed time in seconds: 13.080
