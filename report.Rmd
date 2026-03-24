@@ -15,7 +15,13 @@ The goal of this project is to use the GUIDE algorithm to identify important pre
 # Data preparation
 The Airbnb dataset used for this analysis was obtained from Kaggle and imported into Python using the `kagglehub` package. The training data was loaded into a pandas DataFrame for preprocessing and exploratory inspection.
 
-To prepare the dataset for regression tree modeling, a subset of variables relevant to pricing was selected. These variables include host characteristics, listing capacity, availability indicators, and review information. The selected variables were:
+
+
+<div style="display: flex; gap: 20px; align-items: flex-start;">
+<div>
+To prepare the dataset for regression tree modeling, a subset of variables relevant to pricing was selected. These variables include host characteristics, listing capacity, availability indicators, and review information. Variables were chosen to reflect factors that guests and hosts commonly consider when setting or evaluating listing prices, while excluding identifiers and redundant derived columns.  
+
+The selected variables were:
 
 - host_response_rate  
 - host_acceptance_rate  
@@ -31,12 +37,34 @@ To prepare the dataset for regression tree modeling, a subset of variables relev
 - review_scores_rating  
 - instant_bookable  
 - reviews_per_month  
+</div>
+<div style="flex: 1;">
+
+<div style="width: 550px; flex-shrink: 0;">
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics("correlation_heatmap.png")
+```
+
+</div>
+
+<small>*The correlation heatmap highlights strong relationships between `accommodates`, `beds`, and `bathrooms`, suggesting multicollinearity among capacity-related variables.*</small>
+<br><br>
+
+
+</div>
+</div>
 
 Missing values were examined across all variables to understand the degree of incomplete data. Rather than manually imputing missing values, GUIDE’s built-in missing value handling procedure was used. GUIDE allows observations with incomplete predictor information to remain in the analysis. This is important because real world data, as the users from Airbnb see them, contains missing data, which they take into account when booking stays.
 
 Some variables required transformation before analysis. In particular, the variable `bathrooms_text`, which is stored as a textual description (e.g., "1 bath", "2 baths"), was converted into a numeric variable representing the number of bathrooms.
 
-Price was converted into log(price) as higher prices could get extremely huge.  
+Price was log-transformed to reduce the influence of extreme outliers. The dataset contains a small number of listings with unusually high prices, including one priced at $99,998, which is likely a data entry error. Without transformation, such values would disproportionately influence model fitting.
+
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics("price_distribution.png")
+```
+<small>*The raw price distribution is heavily right-skewed, with a small number of extreme values driving the scale. The log transformation produces a more symmetric distribution, reducing the influence of outliers and making the response variable more suitable for modeling.*</small>
+<br><br>
 
 After preprocessing, the cleaned dataset was exported into a space-delimited text file (`airbnb.txt`) and a corresponding descriptor file (`airbnb.dsc`). These files were then used as input for GUIDE to construct a regression tree predicting listing price.
 
@@ -221,9 +249,10 @@ To verify the results obtained from the GUIDE regression tree, additional models
 
 Before fitting the models, the dataset was cleaned by converting categorical boolean variables to numeric values and removing rows containing missing values. The response variable was the log-transformed listing price.
 
-The dataset was split into training and testing sets using an 80/20 split. A random forest model with 500 trees was then trained to obtain stable estimates of variable importance.
+The dataset was split into training and testing sets using an 80/20 split. To ensure proper out of sample evaluation, all Python models were assessed exclusively on held-out test set, following a fixed random seed of 42 for reproducibility. A random forest model with 500 trees was then trained to obtain stable estimates of variable importance.
 
-### Random Forest
+This is the code used to make the train/test split:
+
 ```Python
 X = df.drop(columns=["price"])
 y = df["price"]
@@ -231,14 +260,57 @@ y = df["price"]
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
+```
+
+### Linear Regression (baseline)
+
+A linear regression model was fit as a baseline to assess how well a parametric model explains variation in listing price. Given the nonlinear nature of the data, this model is expected to under perform compared to tree-based methods, Both a train/test split evaluation and a 10-fold cross-validation were used to asses model stability and generalizability. 
+
+```Python
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_score
+
+lr = LinearRegression()
+lr.fit(X_train, y_train)
+print("Linear Regression R2:", lr.score(X_test, y_test))
+
+scores_lr = cross_val_score(lr, X, y, cv=10, scoring="r2")
+print("Linear Regression CV R2:", scores_lr.mean())
+```
+
+**Result:** 
+
+* Linear Regression R2: 0.4509998021076599
+* Linear Regression CV R2: 0.4825519101335665
+
+### Random Forest
+
+A random forest with 500 trees was trained to obtain stable estimates of variable importance. Both a train/test split evaluation and a 10-fold cross-validation were applied to confirm consistency across evaluation methods. 
+
+```Python
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import cross_val_score
+
 rf = RandomForestRegressor(n_estimators=500, random_state=42)
 rf.fit(X_train, y_train)
 print("Random Forest R2:", rf.score(X_test, y_test))
+
+scores = cross_val_score(rf, X, y, cv=10, scoring="r2")
+print("Random Forest CV R2:", scores.mean())
 ```
 
-**Result:** Random Forest R2: 0.6466300878642877
+**Result:**
 
-Random Forest ended up achieving an R-squared of 0.65, notably lower than GUIDE's 0.72 (though the two scores are not directly comparable as GUIDE's R-squared is measured on the training data rather than a held-out test set).
+* Random Forest R2: 0.6466300878642877
+* Random Forest CV R2: 0.6618993689035436
+
+### Model Result Analysis
+
+The linear regression model achieved an R2 of 0.45, and a cross-validated score of 0.48. The consistency between the two scores indicates the model is stable. This score is expected, as a simple linear equation cannot capture the seemingly nonlinear relationships present in the data.
+
+The random forest achieved an R2 of 0.65 and a cross-validated score of 0.66, again showing strong consistency between evaluation methods. This is substantially higher than linear regression,  suggesting that listing price has meaningful nonlinear structure that a parametric model cannot fully capture, and supports the use of tree-based methods for this data.
+
+GUIDE's R2 of 0.72 is measured on the training data, while both the linear regression R² of 0.45 and the random forest R2 of 0.65 are measured on a held-out test set. **These are not directly comparable**. GUIDE's score would likely be lower on unseen data, meaning the true performance gap between GUIDE and the Python models may be smaller than it appears.
 
 --- 
 
