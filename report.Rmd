@@ -1,16 +1,121 @@
 ---
-title: "STAT443 Project Report"
+title: "STAT443 Project Report: Airbnb Data"
 author: "Juan Sandoval"
+contact: "jsandoval6@wisc.edu | juasandoval03@gmail.com"
 output: html_document
 date: "2026-03-05"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(patchwork)
+library(ggplot2)
 ```
+
+# Abstract
+
+This report analyzes Airbnb listing price data using the GUIDE regression tree algorithm to identify the most influential predictors of listing price. The dataset, obtained from Kaggle, was preprocessed in Python to handle missing values, convert categorical variables, and apply a log transformation to the response variable. GUIDE was then used to construct a regression tree, which identified accommodates, beds, and bathrooms as the strongest predictors, with review_scores_rating serving as the root split variable.
+
+To corroborate these findings, three additional models were trained in Python using scikit-learn: a linear regression baseline, a random forest trained on complete cases after dropping missing values, and a random forest trained on the full dataset after mean imputation. The random forest models achieved R2 scores of approximately 0.64–0.65 on a held-out test set, substantially outperforming linear regression at 0.45. Note that GUIDE's R2 of 0.72 reflects training data performance and is not directly comparable to these test-set scores. Across all models, accommodates consistently emerged as the dominant predictor of listing price, with property characteristics and review-related variables playing supporting roles.
+
+To further corroborate the tree structure, a conditional inference tree was fit in R using ctree, which like GUIDE uses permutation-based statistical tests for variable selection. ctree identified accommodates and review_scores_rating as the most frequently used split variables, consistent with GUIDE's findings, and all splits were statistically significant under a Bonferroni-corrected threshold.
 
 # Project goals
 The goal of this project is to use the GUIDE algorithm to identify important predictors of Airbnb listing prices and to compare these results with models trained independently using Python.
+
+**Research question:** What are the most influential predictors of Airbnb listing prices, and do the GUIDE regression tree algorithm and Python-based models agree on their relative importance?
+
+# Data Visualization
+
+To better understand how listing characteristics relate to price, several exploratory plots are presented below. This data has been cleaned up, explanation for the cleanup is below this section.
+
+```{r, include=FALSE}
+df <- read.csv("data/train_regression.csv")
+df$price <- as.numeric(gsub("[$, ]", "", df$price))
+df$bathrooms <- as.numeric(gsub("[^0-9.]", "", df$bathrooms_text))
+df$host_response_rate <- as.numeric(gsub("%", "", df$host_response_rate))
+df$host_acceptance_rate <- as.numeric(gsub("%", "", df$host_acceptance_rate))
+df$host_is_superhost <- ifelse(df$host_is_superhost == "t", 1, 0)
+df$instant_bookable <- ifelse(df$instant_bookable == "t", 1, 0)
+
+df_no_na_beds <- df[!is.na(df$beds), ]
+df_no_na_bath <- df[!is.na(df$bathrooms), ]
+```
+
+```{r, echo=FALSE, fig.width=14, fig.height=10}
+p1 <- ggplot(df, aes(x = room_type, y = log(price), fill = room_type)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = "Set1") +
+  labs(title = "Log Price by Room Type",
+       x = "Room Type",
+       y = "Log(Price)") +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "none")
+
+p2 <- ggplot(df, aes(x = availability_365, y = log(price))) +
+  geom_point(color = "black", alpha = 0.1) +
+  labs(title = "Availability vs Log Price",
+       x = "Availability (days/year)",
+       y = "Log(Price)") +
+  theme_minimal(base_size = 14)
+
+p3 <- ggplot(df, aes(x = factor(host_is_superhost,
+                               levels = c(0, 1),
+                               labels = c("Not superhost", "Superhost")),
+                     y = log(price),
+                     fill = factor(host_is_superhost))) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = "Set1") +
+  labs(title = "Log Price by Superhost Status",
+       x = "Superhost",
+       y = "Log(Price)") +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "none")
+
+p4 <- ggplot(df, aes(x = factor(accommodates), y = log(price))) +
+  geom_boxplot(fill = "steelblue") +
+  labs(title = "Log Price by Number of Guests (Accommodates)",
+       x = "Accommodates",
+       y = "Log(Price)") +
+  theme_minimal(base_size = 14) 
+
+p5 <- ggplot(df_no_na_bath, aes(x = factor(bathrooms), y = log(price))) +
+  geom_boxplot(fill = "steelblue") +
+  labs(title = "Log Price by Number of Bathrooms",
+       x = "Bathrooms",
+       y = "Log(Price)") +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p6 <- ggplot(df_no_na_beds, aes(x = factor(beds), y = log(price))) +
+  geom_boxplot(fill = "steelblue") +
+  labs(title = "Log Price by Number of Beds",
+       x = "Beds",
+       y = "Log(Price)") +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+(p1 | p2) /
+(p3 | p4) /
+(p5 | p6)
+```
+
+
+### Initial interpretation
+
+These initial observations help identify potential key predictors, which will be examined more rigorously in subsequent modeling.
+
+**Room Type vs Price:** Listings categorized as entire homes tend to have higher prices than private or shared rooms. This indicates that room type is a major structural driver of pricing, with guests paying a premium for full property access.
+
+**Availability vs Price:** The vertical clustering reflects the discrete nature of availability, as many listings share similar availability levels. Listings with very low availability are likely frequently booked, while those with high availability may reflect lower demand or inactive listings. Overall, availability does not show a strong direct relationship with price.
+
+**Superhost Status:** Superhost status shows only minor differences in price distributions. While superhosts may have slightly higher prices on average, the effect is relatively small compared to listing characteristics, suggesting that reputation plays a secondary role in pricing.
+
+**Accommodates:** A clear positive relationship is observed between accommodates and price, with listings that host more guests consistently associated with higher prices. This supports its role as the most important predictor identified in both the GUIDE and random forest models.
+
+**Bathrooms:** Listings with more bathrooms tend to have higher prices, reinforcing the importance of property size and amenities in pricing.
+
+**Beds:** A positive relationship is observed between beds and price, though the effect overlaps with accommodates and bathrooms, indicating these variables capture similar aspects of listing size. 
 
 # Data preparation
 The Airbnb dataset used for this analysis was obtained from Kaggle and imported into Python using the `kagglehub` package. The training data was loaded into a pandas DataFrame for preprocessing and exploratory inspection.
@@ -48,8 +153,6 @@ knitr::include_graphics("correlation_heatmap.png")
 </div>
 
 <small>*The correlation heatmap highlights strong relationships between `accommodates`, `beds`, and `bathrooms`, suggesting multicollinearity among capacity-related variables.*</small>
-<br><br>
-
 
 </div>
 </div>
@@ -138,7 +241,7 @@ The regression tree was constructed using GUIDE v4.6.1, which implements the Gen
 
 The cleaned dataset (`airbnb.txt`) and descriptor file (`airbnb.dsc`) were loaded into GUIDE. The variable **price** was specified as the dependent variable, while all remaining variables were treated as predictors. The response variable price was transformed using log(price) to reduce the effect of extreme values. Airbnb prices tend to be highly right-skewed, with a small number of very expensive listings. Applying a logarithmic transformation reduces skewness and allows the model to capture proportional differences in price more effectively.
 
-A **least-squares regression tree** was used, meaning that splits were chosen to minimize the sum of squared errors within each node. GUIDE automatically evaluates candidate splits and prunes the tree using **cross-validation** to prevent overfitting. The pruning step used 10-fold cross-validation, meaning that the training data was partitioned into ten subsets. The model was repeatedly trained on nine subsets and evaluated on the remaining subset, allowing GUIDE to estimate prediction error and select the optimal tree size.. Missing predictor values are handled automatically by GUIDE through imputation combined with missing-value indicator variables during tree construction.
+A **least-squares regression tree** was used, meaning that splits were chosen to minimize the sum of squared errors within each node. GUIDE automatically evaluates candidate splits and prunes the tree using **cross-validation** to prevent overfitting. The pruning step used 10-fold cross-validation, meaning that the training data was partitioned into ten subsets. The model was repeatedly trained on nine subsets and evaluated on the remaining subset, allowing GUIDE to estimate prediction error and select the optimal tree size. Missing predictor values are handled automatically by GUIDE through imputation combined with missing-value indicator variables during tree construction.
 
 The training dataset used for the tree contained **5,000 observations**, with predictors describing listing characteristics, host behavior, and review information.
 
@@ -241,9 +344,118 @@ The terminal nodes of the tree are colored based on whether their predicted **me
 
 This color scheme helps visually identify which combinations of listing characteristics correspond to relatively higher or lower predicted prices.
 
+--- 
+
+# Corroborating GUIDE tree with R (ctree)
+
+To provide a more methodologically comparable alternative to GUIDE, a conditional inference tree was fit in R using the ctree function from the party package. Like GUIDE, ctree uses permutation-based statistical tests to select split variables at each node, rather than greedily minimizing a loss function. The same preprocessed dataset used for GUIDE was loaded and prepared in R. Boolean columns were converted to factors, and rows with missing values were dropped to satisfy ctree's input requirements, meaning ctree was trained on complete cases only.
+
+```{r ctree-setup, message=FALSE, warning=FALSE, echo=FALSE}
+library(party)
+library(dplyr)
+
+airbnb <- read.csv("./data/train_regression.csv", stringsAsFactors = FALSE)
+
+cols_to_keep <- c(
+  "host_response_rate", "host_acceptance_rate", "host_is_superhost",
+  "accommodates", "beds", "price", "minimum_nights", "maximum_nights",
+  "has_availability", "number_of_reviews", "review_scores_rating",
+  "instant_bookable", "reviews_per_month"
+)
+
+df_r <- airbnb[, cols_to_keep]
+
+df_r$price <- as.numeric(gsub("[$,]", "", df_r$price))
+df_r$price <- log(df_r$price)
+
+df_r$host_response_rate  <- as.numeric(gsub("%", "", df_r$host_response_rate))  / 100
+df_r$host_acceptance_rate <- as.numeric(gsub("%", "", df_r$host_acceptance_rate)) / 100
+
+bool_cols <- c("host_is_superhost", "has_availability", "instant_bookable")
+df_r[bool_cols] <- lapply(df_r[bool_cols], as.factor)
+
+df_r <- na.omit(df_r)
+
+set.seed(42)
+n <- nrow(df_r)
+train_idx <- sample(seq_len(n), size = floor(0.8 * n))
+train_r <- df_r[ train_idx, ]
+test_r  <- df_r[-train_idx, ]
+```
+
+```{r ctree-fit, message=FALSE, warning=FALSE, echo=FALSE}
+ct <- ctree(price ~ ., data = train_r)
+
+extract_splits <- function(node) {
+  if (is.null(node$psplit)) return(character(0))
+  c(node$psplit$variableName,
+    extract_splits(node$left),
+    extract_splits(node$right))
+}
+
+used_vars <- extract_splits(ct@tree)
+importance_ct <- sort(table(used_vars), decreasing = TRUE)
+
+imp_df <- as.data.frame(importance_ct)
+colnames(imp_df) <- c("Variable", "Count")
+imp_df$Normalized <- (imp_df$Count / max(imp_df$Count)) * 100
+imp_df <- imp_df[order(imp_df$Normalized), ]
+
+top_k <- 3
+imp_df$Color <- ifelse(
+  imp_df$Normalized >= sort(imp_df$Normalized, decreasing = TRUE)[top_k],
+  rgb(251, 0, 0, maxColorValue = 255),
+  rgb(109, 109, 109, maxColorValue = 255)
+)
+
+p <- ggplot(imp_df, aes(x = Normalized, y = reorder(Variable, Normalized), fill = Color)) +
+  geom_bar(stat = "identity", width = 0.8) +
+  scale_fill_identity() +
+  scale_x_continuous(expand = expansion(add = c(0, 3)), limits = c(0, 100), breaks = seq(0, 100, 20)) +
+  scale_y_discrete(expand = expansion(add = c(1, 1))) +
+  labs(
+    title = "Feature Importance (ctree)",
+    x = "Normalized Split Count (0-100)",
+    y = NULL
+  ) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(face = "plain", hjust = 0.5),
+    panel.border = element_rect(color = "black", fill = NA),
+    panel.grid = element_blank(),
+    legend.position = "none",
+    axis.text.y = element_text(size = 11, color = "black")
+
+  )
+
+ggsave("ctree_feature_importance.png", plot = p, width = 6, height = 5, dpi = 150)
+
+png("ctree_tree.png", width=4000, height=2000, res=150)
+plot(ct, type="simple")
+invisible(dev.off())
+```
+
+<img src="./ctree_tree.png" style="width: 100%;"/>
+
+### Root Split
+
+The difference in root split between GUIDE (review_scores_rating) and ctree (accommodates) does not indicate disagreement between the models. The root split identifies the single best first partition of the data, which is sensitive to the specific dataset and splitting criterion used. GUIDE selects the root split based on which variable best reduces prediction error in one step, while ctree selects based on the strongest statistical association. These are different criteria and can legitimately produce different root splits while still agreeing on the overall importance structure. The fact that both variables appear prominently in both trees (accommodates as GUIDE's top importance score and ctree's root, review_scores_rating as GUIDE's root and tied for top in ctree) suggests both are genuinely influential, with the ordering depending on how "importance" is measured rather than reflecting a true disagreement about which variables matter.
+
+### Statistical significance
+
+All splits are statistically significant, with every node in the ctree shows a p-value, and all are significant. This is meaningful because unlike GUIDE where most splits had gray circles (not statistically significant), every split ctree made passed the Bonferroni-corrected threshold. The variables that appear here are statistically supported, not just predictively useful.
+
+### Key variables that appear 
+
+accommodates, review_scores_rating, reviews_per_month, minimum_nights, beds all appear as split variables, consistent with what GUIDE and the random forests found.
+
+### Tree size 
+
+ctree produced a much smaller tree than GUIDE's 50 terminal nodes, which is expected given its stricter splitting criterion.
+
 ---
 
-# Corroborating with Python
+# Corroborating GUIDE results with Python
 
 To verify the results obtained from the GUIDE regression tree, additional models were trained using Python’s scikit-learn library. Specifically, a random forest regressor was fit using the same set of variables used in the GUIDE analysis.
 
@@ -262,14 +474,13 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 ```
 
+**Note:** Unlike GUIDE, Python's scikit-learn models do not handle missing values natively and require the programmer to address them beforehand. For linear regression, rows with missing values were dropped. For the random forest, both dropping and mean imputation were tested to assess whether the handling strategy affects the results.
+
 ### Linear Regression (baseline)
 
-A linear regression model was fit as a baseline to assess how well a parametric model explains variation in listing price. Given the nonlinear nature of the data, this model is expected to under perform compared to tree-based methods, Both a train/test split evaluation and a 10-fold cross-validation were used to asses model stability and generalizability. 
+A linear regression model was fit as a baseline to assess how well a parametric model explains variation in listing price. Given the nonlinear nature of the data, this model is expected to underperform compared to tree-based methods. Both a train/test split evaluation and a 10-fold cross-validation were used to assess model stability and generalizability. 
 
 ```Python
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import cross_val_score
-
 lr = LinearRegression()
 lr.fit(X_train, y_train)
 print("Linear Regression R2:", lr.score(X_test, y_test))
@@ -283,14 +494,11 @@ print("Linear Regression CV R2:", scores_lr.mean())
 * Linear Regression R2: 0.4509998021076599
 * Linear Regression CV R2: 0.4825519101335665
 
-### Random Forest
+### Random Forest (Dropping NaNs)
 
 A random forest with 500 trees was trained to obtain stable estimates of variable importance. Both a train/test split evaluation and a 10-fold cross-validation were applied to confirm consistency across evaluation methods. 
 
 ```Python
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import cross_val_score
-
 rf = RandomForestRegressor(n_estimators=500, random_state=42)
 rf.fit(X_train, y_train)
 print("Random Forest R2:", rf.score(X_test, y_test))
@@ -304,91 +512,238 @@ print("Random Forest CV R2:", scores.mean())
 * Random Forest R2: 0.6466300878642877
 * Random Forest CV R2: 0.6618993689035436
 
+### Random Forest (Imputing NaNs)
+
+Similarly, another random forest with 500 trees was trained with the difference of training on the full dataset after mean imputation of missing values. Here is the code for the imputation:
+
+```Python
+imputer = SimpleImputer(strategy="mean")
+X_train = pd.DataFrame(imputer.fit_transform(X_train), columns=X.columns)
+X_test = pd.DataFrame(imputer.transform(X_test), columns=X.columns)
+```
+
+Both a train/test split evaluation and a 10-fold cross-validation were applied to confirm consistency across evaluation methods, reusing the same code from before, but with the added imputed row values within the df:
+
+```Python
+rf = RandomForestRegressor(n_estimators=500, random_state=42)
+rf.fit(X_train, y_train)
+print("Random Forest R2:", rf.score(X_test, y_test))
+
+scores = cross_val_score(rf, X, y, cv=10, scoring="r2")
+print("Random Forest CV R2:", scores.mean())
+```
+
+**Result:**
+
+* Random Forest R2: 0.6395592831929331
+* Random Forest CV R2: 0.6460314925799823
+
 ### Model Result Analysis
+
+Note on model comparability: GUIDE's R2 of 0.72 is a training R2 (labeled "Proportion of variance explained by tree model" in GUIDE's output), while all Python model scores are measured on a held-out test set. These numbers are not directly comparable, and GUIDE's score would likely be lower on unseen data. Rather than treating R2 as a performance ranking across models, this analysis focuses on whether the models agree on which predictors matter most.
+
+**Explanation of trustworthiness of results:**
 
 The linear regression model achieved an R2 of 0.45, and a cross-validated score of 0.48. The consistency between the two scores indicates the model is stable. This score is expected, as a simple linear equation cannot capture the seemingly nonlinear relationships present in the data.
 
-The random forest achieved an R2 of 0.65 and a cross-validated score of 0.66, again showing strong consistency between evaluation methods. This is substantially higher than linear regression,  suggesting that listing price has meaningful nonlinear structure that a parametric model cannot fully capture, and supports the use of tree-based methods for this data.
-
-GUIDE's R2 of 0.72 is measured on the training data, while both the linear regression R² of 0.45 and the random forest R2 of 0.65 are measured on a held-out test set. **These are not directly comparable**. GUIDE's score would likely be lower on unseen data, meaning the true performance gap between GUIDE and the Python models may be smaller than it appears.
+Both random forest models outperformed linear regression substantially. The model trained on dropped NaNs achieved an R2 of 0.65 and a cross-validated score of 0.66, while the model trained on imputed NaNs achieved an R² of 0.64 and a cross-validated score of 0.65. Both show strong consistency between evaluation methods, and the near-identical performance between the two random forests suggests that mean imputation introduces minimal distortion. The additional approximate 1,000 rows retained through imputation did not meaningfully hurt predictive accuracy.
 
 --- 
 
 # Importance calculations
 
+### Normalize Scores
+
+To enable a fair visual comparison between GUIDE and Random Forest importance scores, both are normalized to a 0–100 scale by dividing each score by its maximum value. In the graphs, the top 3 importance scores were highlighted in red. 
+
 ### GUIDE importance
 
 GUIDE also provides a variable importance ranking that measures how strongly each predictor contributes to explaining variation in the response variable. Higher scores indicate variables that are more influential in determining listing price. 
 
-<div style="width: 70%; font-family: monospace; font-size: 0.9em;">
-
-| Rank | Group | Score | Missing | Variable |
-|-----:|:-----:|------:|--------:|:---------|
-| 1 | A | 1.066E+02 | 0 | accommodates |
-| 2 | A | 6.816E+01 | 48 | beds |
-| 3 | A | 6.472E+01 | 11 | bathrooms |
-| 4 | A | 2.453E+01 | 1041 | review_scores_rating |
-| 5 | A | 1.635E+01 | 0 | maximum_nights |
-| 6 | A | 1.578E+01 | 1042 | reviews_per_month |
-| 7 | A | 1.012E+01 | 0 | number_of_reviews |
-| 8 | A | 6.899E+00 | 0 | minimum_nights |
-| 9 | A | 6.252E+00 | 291 | host_acceptance_rate |
-| 10 | A | 4.243E+00 | 418 | host_response_rate |
-| 11 | A | 3.819E+00 | 23 | host_is_superhost |
-| 12 | A | 2.224E+00 | 0 | instant_bookable |
-| 13 | A | 1.470E+00 | 0 | has_availability |
-
+<div style="display: flex; gap: 15px; align-items: flex-start;">
+  <div style="min-width: 0; width: 55%; font-family: monospace; font-size: 0.85em; overflow: hidden;" markdown="1">
+    
+  | Score | Normalized | Variable |
+  |------:|-----------:|:---------|
+  | **106.60** | **100.00** | **accommodates** |
+  | **68.16** | **63.94** | **beds** |
+  | **64.72** | **60.71** | **bathrooms** |
+  | 24.53 | 23.01 | review_scores_rating |
+  | 16.35 | 15.34 | maximum_nights |
+  | 15.78 | 14.80 | reviews_per_month |
+  | 10.12 | 9.49 | number_of_reviews |
+  | 6.90 | 6.47 | minimum_nights |
+  | 6.25 | 5.86 | host_acceptance_rate |
+  | 4.24 | 3.98 | host_response_rate |
+  | 3.82 | 3.58 | host_is_superhost |
+  | 2.22 | 2.09 | instant_bookable |
+  | 1.47 | 1.38 | has_availability |
+  
+  </div>
+  
+  <div style="min-width: 0; width: 45%;">
+  <img src="guide_feature_importance.png" style="width: 100%; max-height: 400px; object-fit: contain;"/>
+  </div>
 </div>
 
 **Note:** review_scores_rating is ranked fourth GUIDE. GUIDE's importance score measures a variable's cumulative contribution across all nodes in the tree, while the root split reflects which variable best partitions the data at the first single step. accommodates dominates importance because it appears repeatedly throughout the tree, accumulating score across many splits, while review_scores_rating provides the single best initial binary partition of the data, cleanly separating higher- and lower-priced listings before any other variable is considered. These two metrics are measuring different things.
 
-### Random Forest Importance
+**Implementation note:** I created a simple Python script to read the data as is from the txt file generated by GUIDE, allowing me to graph it later:
+
+```Python
+# Read the file (fixed-width format)
+df = pd.read_fwf("importance.txt")
+
+# Convert Score from scientific notation to float (just in case)
+df["Score"] = df["Score"].astype(float)
+```
+
+### ctree
+
+A conditional inference tree was then fit on the training data using default settings, which apply a Bonferroni-corrected permutation test at each node to determine whether a split is warranted. Because `ctree` does not produce a single numeric importance score like Random Forest, variable importance is approximated by counting how many times each variable is selected as a split variable across all internal nodes.
+
+**Result:**
+<div style="display: flex; gap: 30px; align-items: flex-start;">
+  <div style="min-width: 0; width: 55%; font-family: monospace; font-size: 0.85em; overflow: hidden;" markdown="1">
+
+  | Variable | Split Count | Normalized |
+  |:---------|----------:|-----------:|
+  | **accommodates** | **9** | **100.0** |
+  | **review_scores_rating** | **9** | **100.0** |
+  | **reviews_per_month** | **7** | **77.8** |
+  | minimum_nights | 3 | 33.3 |
+  | maximum_nights | 3 | 33.3 |
+  | beds | 2 | 22.2 |
+  | host_acceptance_rate | 2 | 22.2 |
+  | host_is_superhost | 2 | 22.2 |
+  | instant_bookable | 1 | 11.1 |
+  | number_of_reviews | 1 | 11.1 |
+
+  </div>
+  <div style="min-width: 0; width: 45%;">
+  <img src="./ctree_feature_importance.png" style="width: 100%; max-height: 500px; object-fit: contain;"/>
+  </div>
+</div>
+
+### Random Forest Importance (Dropped)
 
 After calculating the values, RF allows for its importances to be exported with code similar to this:
 
 ```Python
-importance = pd.Series(rf.feature_importances_, index=X.columns)
-importance.sort_values(ascending=False)
+importance_df["Normalized"] = (importance_df["Score"] / importance_df["Score"].max()) * 100
+print(importance_df[["Variable", "Score", "Normalized"]].sort_values("Score", ascending=False))
 ```
 **Result:**
 
-<div style="width:40%;">
-| Variable | Importance |
-|----------|-----------|
-| **accommodates** | **0.421** |
-| **bathrooms** | **0.153** |
-| **reviews_per_month** | **0.103** |
-| **review_scores_rating** | **0.074** |
-| number_of_reviews | 0.059 |
-| host_acceptance_rate | 0.056 |
-| maximum_nights | 0.041 |
-| minimum_nights | 0.031 |
-| host_response_rate | 0.023 |
-| beds | 0.021 |
-| host_is_superhost | 0.009 |
-| instant_bookable | 0.009 |
-| has_availability | 0.000 |
+<div style="display: flex; gap: 30px; align-items: flex-start;">
+  <div style="min-width: 0; width: 45%; font-family: monospace; font-size: 0.85em; overflow: hidden;" markdown="1">
 
+  | Variable | Score | Normalized |
+  |:---------|----------:|-----------:|
+  | **accommodates** | **0.421** | **100.00** |
+  | **bathrooms** | **0.153** | **36.42** |
+  | **reviews_per_month** | **0.103** | **24.40** |
+  | review_scores_rating | 0.074 | 17.61 |
+  | number_of_reviews | 0.059 | 14.04 |
+  | host_acceptance_rate | 0.056 | 13.26 |
+  | maximum_nights | 0.041 | 9.62 |
+  | minimum_nights | 0.031 | 7.40 |
+  | host_response_rate | 0.023 | 5.42 |
+  | beds | 0.021 | 4.91 |
+  | host_is_superhost | 0.009 | 2.20 |
+  | instant_bookable | 0.009 | 2.15 |
+  | has_availability | 0.000 | 0.00 |
+  
+  </div>
+  
+  <div style="min-width: 0; width: 55%;">
+  <img src="./rf_dropped_feature_importance.png" style="width: 100%; max-height: 400px; object-fit: contain;"/>
+  </div>
 </div>
+
+### Random Forest Importance (Imputed)
+
+Calculating the importance is done the same way as earlier with the dropped-data Random Forest:
+
+```Python
+importance_df["Normalized"] = (importance_df["Score"] / importance_df["Score"].max()) * 100
+print(importance_df[["Variable", "Score", "Normalized"]].sort_values("Score", ascending=False))
+```
+
+**Result:**
+
+<div style="display: flex; gap: 30px; align-items: flex-start;">
+  <div style="min-width: 0; width: 45%; font-family: monospace; font-size: 0.85em; overflow: hidden;" markdown="1">
+
+  | Variable | Score | Normalized |
+  |:---------|----------:|-----------:|
+  | **accommodates** | **0.371** | **100.00** |
+  | **bathrooms** | **0.153** | **41.26** |
+  | **reviews_per_month** | **0.078** | **21.01** |
+  | number_of_reviews | 0.071 | 19.22 |
+  | host_acceptance_rate | 0.070 | 19.01 |
+  | review_scores_rating | 0.065 | 17.50 |
+  | maximum_nights | 0.064 | 17.35 |
+  | minimum_nights | 0.041 | 11.13 |
+  | host_response_rate | 0.036 | 9.71 |
+  | beds | 0.025 | 6.87 |
+  | instant_bookable | 0.013 | 3.49 |
+  | host_is_superhost | 0.011 | 2.91 |
+  | has_availability | 0.001 | 0.39 |
+
+  </div>
+  
+  <div style="min-width: 0; width: 55%;">
+  <img src="./rf_imputed_feature_importance.png" style="width: 100%; max-height: 400px; object-fit: contain;"/>
+  </div>
+</div>
+
+
 
 ---
 
-# Comparison of GUIDE and Random Forest Results
+# Comparison of Importance Results
 
-Both models identify **accommodates** as the most important predictor overall based on variable importance scores.
+### Comparison between GUIDE and ctree
 
-Property characteristics such as bathrooms and beds rank highly in the GUIDE importance scores and are similarly influential in the random forest model, with the caveat of beds being in the lower end compared to GUIDE. These results indicate that structural features of the listing play an important role in determining price. 
+The only variable in the top 3 of both GUIDE and ctree is accommodates, which ranks first in both. Beyond that the rankings diverge, as GUIDE emphasizes property size variables (beds, bathrooms) while ctree emphasizes review-related variables (review_scores_rating, reviews_per_month). This difference is partly methodological: GUIDE's importance score weights splits by how much they reduced prediction error, favoring variables that make fewer but more impactful splits, while ctree's importance is a raw count of split appearances, favoring variables that appear repeatedly.
 
-Review-related variables such as review_scores_rating, reviews_per_month, and number_of_reviews also appear among the important predictors in both models. These variables likely capture aspects of guest satisfaction and listing popularity, which can influence demand and therefore pricing.
+### Comparison between dropped and imputed
 
-Although the exact importance rankings differ slightly between the GUIDE algorithm and the random forest model, the overlap in key predictors suggests that these relationships are robust across modeling approaches rather than artifacts of a specific algorithm.
+The top two variables are identical in both, in which accommodates is by far the most important in both cases, and bathrooms holds second place. The main differences are:
+
+* `accommodates` dropped from 0.421 to 0.371, so it's slightly less dominant with imputation
+* `bathrooms`' normalized score went up from 36.42 to 41.26 and is now relatively more important when accommodates weakens
+* `reviews_per_month` got weaker (0.103 to 0.078)
+* The middle variables shuffled slightly: 
+  * `review_scores_rating` dropped from 4th to 6th
+  * `number_of_reviews` moved up from 5th to 3rd
+  * `host_acceptance_rate` moved up from 6th to 4th
+  * `maximum_nights moved` up from 7th to 5th (tied area)
+* `has_availability` went from exactly 0.000 to 0.001, essentially still zero but imputation recovered a tiny signal
+
+This essentially means that the ranking shifts are minor and confined to the middle of the importance list. The top three variables remain unchanged in both position and relative dominance, and everything from minimum_nights downward holds its order exactly. The small reshuffling in the middle is expected given how similarly scored those variables are, where minor variation in the training data can cause reordering among near-tied variables. Overall, the two models agree strongly on which variables matter and by how much, suggesting that the choice of how to handle missing values has negligible impact on the conclusions drawn from variable importance.
+
+### Comparison between GUIDE and Random Forest 
+
+Both sets of models identify **accommodates** as the most important predictor overall based on variable importance scores.
+
+Property characteristics such as bathrooms and beds rank highly in the GUIDE importance scores and are similarly influential in both random forest models, with the caveat of beds being in the lower end compared to GUIDE. These results indicate that structural features of the listing play an important role in determining price.
+
+Review-related variables such as review_scores_rating, reviews_per_month, and number_of_reviews also appear among the important predictors across all three models. These variables likely capture aspects of guest satisfaction and listing popularity, which can influence demand and therefore pricing.
+
+Although the exact importance rankings differ slightly between GUIDE and the random forest models, the two random forest variants themselves are in strong agreement (the minor reshuffling observed in the middle of the importance list has no bearing on the overall conclusions). The broad overlap in key predictors across all three models suggests that these relationships are robust across modeling approaches and missing data strategies, rather than artifacts of any specific algorithm or preprocessing choice.
 
 --- 
 
 # Conclusion
+This analysis used the GUIDE regression tree algorithm to identify predictors of Airbnb listing prices and compared the results with models trained in Python and a conditional inference tree fit in R. Across all models, accommodates consistently emerged as the most influential predictor, suggesting that listing capacity is the primary driver of price. GUIDE additionally identifies beds and bathrooms as strong contributors, while the random forests emphasize bathrooms and reviews_per_month, and ctree highlights review_scores_rating and reviews_per_month alongside accommodates. The partial agreement across methods suggests that property characteristics and review-related variables have a consistent relationship with listing price, while differences in rankings reflect each method's sensitivity to different aspects of the data.
 
-This analysis used the GUIDE regression tree algorithm to identify predictors of Airbnb listing prices and compared the results with models trained in Python. Both approaches highlight accommodates as one of the most influential predictors overall, suggesting that listing capacity is an important driver of price. Property characteristics such as bathrooms and beds, as well as review-related variables like review_scores_rating and reviews_per_month, also contribute meaningfully to price variation. The agreement between the GUIDE and random forest models suggests that these predictors have a consistent relationship with listing price.
+In the real world, guests also take missing information into account when booking. A listing without reviews or an unresponsive host may signal uncertainty, making guests less likely to book regardless of price. This suggests that missing values in variables like review_scores_rating and host_acceptance_rate are not purely a data quality issue, but may themselves reflect meaningful listing characteristics.
 
-In the real world, guests also take missing information into account when booking. A listing without reviews or an unresponsive host may signal uncertainty, making buyers less likely to book regardless of price. This suggests that missing values in variables like review_scores_rating and host_acceptance_rate are not purely a data quality issue, but may themselves reflect meaningful listing characteristics.
+The most notable discrepancy across models is the role of beds, which ranks second in GUIDE but near the bottom in both random forests and ctree. This likely reflects the high correlation between beds, bathrooms, and accommodates. GUIDE may be capturing beds as a proxy for overall listing size, while the other models distribute that predictive credit more heavily onto accommodates and bathrooms.
 
-Overall, this analysis demonstrates that GUIDE and random forest models converge on a consistent set of predictors, lending confidence to the findings. Listing capacity, property characteristics, and guest review information emerge as the primary drivers of Airbnb pricing, and these relationships hold across both tree-based approaches.
+Overall, the convergence across four distinct modeling approaches (GUIDE, ctree, and two random forest variants) on listing capacity and property characteristics as the primary drivers of Airbnb pricing lends strong confidence to these findings. While no two methods rank all variables identically, their agreement on the most dominant predictor is consistent and robust.
+
+<br><br>
+
