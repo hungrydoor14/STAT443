@@ -411,7 +411,7 @@ imp_df$Color <- ifelse(
 p <- ggplot(imp_df, aes(x = Normalized, y = reorder(Variable, Normalized), fill = Color)) +
   geom_bar(stat = "identity", width = 0.8) +
   scale_fill_identity() +
-  scale_x_continuous(expand = expansion(add = c(0, 3)), limits = c(0, 100), breaks = seq(0, 100, 20)) +
+  scale_x_continuous(expand = expansion(add = c(0, 6)), limits = c(0, 100), breaks = seq(0, 100, 20)) +
   scale_y_discrete(expand = expansion(add = c(1, 1))) +
   labs(
     title = "Feature Importance (ctree)",
