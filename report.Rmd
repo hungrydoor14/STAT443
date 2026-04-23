@@ -1,9 +1,11 @@
 ---
-title: "STAT443 Project Report: Airbnb Data"
+title: 'STAT443 Project Report: Airbnb Data'
 author: "Juan Sandoval"
-contact: "jsandoval6@wisc.edu | juasandoval03@gmail.com"
-output: html_document
 date: "2026-03-05"
+output:
+  html_document: default
+  pdf_document: default
+contact: jsandoval6@wisc.edu | juasandoval03@gmail.com
 ---
 
 ```{r setup, include=FALSE}
@@ -14,20 +16,26 @@ library(ggplot2)
 
 # Abstract
 
-This report analyzes Airbnb listing price data using the GUIDE regression tree algorithm to identify the most influential predictors of listing price. The dataset, obtained from Kaggle, was preprocessed in Python to handle missing values, convert categorical variables, and apply a log transformation to the response variable. GUIDE was then used to construct a regression tree, which identified accommodates, beds, and bathrooms as the strongest predictors, with review_scores_rating serving as the root split variable.
+This report analyzes Airbnb listing prices to determine which listing characteristics are most influential in predicting price and whether those conclusions are consistent across several modeling approaches. The analysis focuses on the GUIDE regression tree algorithm as the primary method and compares its results with a conditional inference tree fit in R and several models trained independently in Python. Because Airbnb prices are shaped by a combination of listing size, amenities, host behavior, booking restrictions, and review-related information, this project asks whether different methods identify the same variables as the main drivers of price.
 
-To corroborate these findings, three additional models were trained in Python using scikit-learn: a linear regression baseline, a random forest trained on complete cases after dropping missing values, and a random forest trained on the full dataset after mean imputation. The random forest models achieved R2 scores of approximately 0.64–0.65 on a held-out test set, substantially outperforming linear regression at 0.45. Note that GUIDE's R2 of 0.72 reflects training data performance and is not directly comparable to these test-set scores. Across all models, accommodates consistently emerged as the dominant predictor of listing price, with property characteristics and review-related variables playing supporting roles.
+The dataset was obtained from Kaggle and contains Airbnb listing information such as accommodation capacity, bed and bathroom counts, availability measures, host response and acceptance rates, and review statistics. Before modeling, the data were preprocessed in Python to convert percentage variables into numeric form, recode boolean fields, transform `bathrooms_text` into a numeric bathroom measure, and log-transform the response variable `price`. The log transformation was used because the raw price distribution was strongly right-skewed and contained extreme outliers that would otherwise dominate the analysis. Missing values were also an important feature of the dataset, so part of the project involved comparing how different modeling approaches behaved under different missing-data strategies.
 
-To further corroborate the tree structure, a conditional inference tree was fit in R using ctree, which like GUIDE uses permutation-based statistical tests for variable selection. ctree identified accommodates and review_scores_rating as the most frequently used split variables, consistent with GUIDE's findings, and all splits were statistically significant under a Bonferroni-corrected threshold.
+The main model in the report is a least-squares regression tree fit using GUIDE v4.6.1. GUIDE was chosen because it is specifically designed for classification and regression trees with statistically motivated split selection, built-in handling of missing predictor values, and interpretable variable importance scoring. The GUIDE model was fit on 5,000 training observations with `log(price)` as the response. The final tree contained 50 terminal nodes and explained 72.24% of the variance in the training data. In the fitted tree, `review_scores_rating` appeared as the root split variable, meaning it gave the strongest initial partition of the data, while the GUIDE importance table identified `accommodates`, `beds`, and `bathrooms` as the most influential predictors when contribution across the full tree was aggregated.
+
+To evaluate whether these findings were specific to GUIDE or reflected a broader pattern in the data, three additional models were fit in Python using scikit-learn: a linear regression baseline, a random forest trained on complete cases after dropping missing values, and a second random forest trained after mean imputation so that more observations could be retained. These Python models were evaluated using an 80/20 train-test split with random seed 42, and 10-fold cross-validation was used to assess stability. The linear regression model achieved an out-of-sample R2 of approximately 0.45, indicating that a simple linear specification was not flexible enough to capture the full structure of the data. Both random forest models performed substantially better, with test-set R2 values around 0.64 to 0.65 and cross-validated scores of similar magnitude. The close agreement between the dropped-data and imputed-data random forests suggests that the treatment of missing values does not substantially change the main conclusions about predictive structure.
+
+To further compare GUIDE with another statistically based tree method, a conditional inference tree (`ctree`) was fit in R. Like GUIDE, ctree uses permutation-based statistical testing to determine splits, making it a natural methodological comparison. Because ctree does not provide the same kind of variable importance score as GUIDE or random forest, importance was approximated by counting how often each variable appeared as a split variable throughout the tree. The ctree analysis identified `accommodates` and `review_scores_rating` as the most frequently used split variables, and all splits in the fitted tree were statistically significant under the default Bonferroni-corrected criterion. Although the ctree model produced a smaller tree than GUIDE, it reinforced the same overall message about which variables matter most.
+
+Across GUIDE, ctree, and both random forest models, `accommodates` consistently emerged as the strongest predictor of Airbnb price. GUIDE also placed substantial emphasis on `beds` and `bathrooms`, while the random forest models highlighted `bathrooms`, `reviews_per_month`, and `review_scores_rating`. The ctree results similarly emphasized `accommodates`, `review_scores_rating`, and `reviews_per_month`. Taken together, these findings indicate that Airbnb pricing in this dataset is driven primarily by listing capacity and related structural characteristics, with review-based measures playing an important supporting role. Although the exact variable rankings differ somewhat across models, the broad agreement among methods suggests that the main conclusions are robust rather than artifacts of one specific algorithm. At the same time, the comparison shows that “importance” must be interpreted carefully, since root splits, GUIDE importance scores, split frequency, and random forest importance values capture related but not identical aspects of predictor influence.
 
 # Project goals
 The goal of this project is to use the GUIDE algorithm to identify important predictors of Airbnb listing prices and to compare these results with models trained independently using Python.
 
-**Research question:** What are the most influential predictors of Airbnb listing prices, and do the GUIDE regression tree algorithm and Python-based models agree on their relative importance?
+**Research question:** Which variables are most influential in determining Airbnb listing price, and do GUIDE and other modeling approaches agree on their relative importance?
 
 # Data Visualization
 
-To better understand how listing characteristics relate to price, several exploratory plots are presented below. This data has been cleaned up, explanation for the cleanup is below this section.
+To better understand how listing characteristics relate to price, several exploratory plots are presented below. The data shown here have already been cleaned for visualization; details of the preprocessing steps are provided in the next section.
 
 ```{r, include=FALSE}
 df <- read.csv("data/train_regression.csv")
@@ -157,7 +165,7 @@ knitr::include_graphics("correlation_heatmap.png")
 </div>
 </div>
 
-Missing values were examined across all variables to understand the degree of incomplete data. Rather than manually imputing missing values, GUIDE’s built-in missing value handling procedure was used. GUIDE allows observations with incomplete predictor information to remain in the analysis. This is important because real world data, as the users from Airbnb see them, contains missing data, which they take into account when booking stays.
+Missing values were examined across all variables to understand the degree of incomplete data. Rather than manually imputing missing values, GUIDE’s built-in missing value handling procedure was used. GUIDE allows observations with incomplete predictor information to remain in the analysis. This is important because real-world Airbnb listings often contain missing information, and potential guests may incorporate that missingness into their booking decisions.
 
 Some variables required transformation before analysis. In particular, the variable `bathrooms_text`, which is stored as a textual description (e.g., "1 bath", "2 baths"), was converted into a numeric variable representing the number of bathrooms.
 
@@ -241,7 +249,7 @@ The regression tree was constructed using GUIDE v4.6.1, which implements the Gen
 
 The cleaned dataset (`airbnb.txt`) and descriptor file (`airbnb.dsc`) were loaded into GUIDE. The variable **price** was specified as the dependent variable, while all remaining variables were treated as predictors. The response variable price was transformed using log(price) to reduce the effect of extreme values. Airbnb prices tend to be highly right-skewed, with a small number of very expensive listings. Applying a logarithmic transformation reduces skewness and allows the model to capture proportional differences in price more effectively.
 
-A **least-squares regression tree** was used, meaning that splits were chosen to minimize the sum of squared errors within each node. GUIDE automatically evaluates candidate splits and prunes the tree using **cross-validation** to prevent overfitting. The pruning step used 10-fold cross-validation, meaning that the training data was partitioned into ten subsets. The model was repeatedly trained on nine subsets and evaluated on the remaining subset, allowing GUIDE to estimate prediction error and select the optimal tree size. Missing predictor values are handled automatically by GUIDE through imputation combined with missing-value indicator variables during tree construction.
+A **least-squares regression tree** was used, meaning that GUIDE fit a regression tree under a least-squares criterion while using its own statistically motivated split-selection procedure and cross-validation pruning. GUIDE automatically evaluates candidate splits and prunes the tree using **cross-validation** to prevent overfitting. The pruning step used 10-fold cross-validation, meaning that the training data was partitioned into ten subsets. The model was repeatedly trained on nine subsets and evaluated on the remaining subset, allowing GUIDE to estimate prediction error and select the optimal tree size. Missing predictor values are handled automatically by GUIDE through imputation combined with missing-value indicator variables during tree construction.
 
 The training dataset used for the tree contained **5,000 observations**, with predictors describing listing characteristics, host behavior, and review information.
 
@@ -331,7 +339,7 @@ Several additional variables appear frequently throughout the tree and help refi
 - **accommodates:** captures the capacity of the listing  
 - **minimum_nights:** distinguishes between short-term and longer required stays  
 - **number_of_reviews:** indicates listing popularity and user engagement  
-- **reviews_per_month:** captures how frequently a listing receives reviews, which can reflect both demand and listing activity, or how frequently guests review the listing and may capture demand or booking activity.
+- **reviews_per_month:** captures recent review activity and likely reflects listing demand, visibility, and booking frequency.
 
 For example, splits on accommodates show that listings that can host more guests tend to have higher predicted prices. Similarly, minimum_nights separates listings designed for short stays from those requiring longer bookings.
 
@@ -439,15 +447,15 @@ invisible(dev.off())
 
 ### Root Split
 
-The difference in root split between GUIDE (review_scores_rating) and ctree (accommodates) does not indicate disagreement between the models. The root split identifies the single best first partition of the data, which is sensitive to the specific dataset and splitting criterion used. GUIDE selects the root split based on which variable best reduces prediction error in one step, while ctree selects based on the strongest statistical association. These are different criteria and can legitimately produce different root splits while still agreeing on the overall importance structure. The fact that both variables appear prominently in both trees (accommodates as GUIDE's top importance score and ctree's root, review_scores_rating as GUIDE's root and tied for top in ctree) suggests both are genuinely influential, with the ordering depending on how "importance" is measured rather than reflecting a true disagreement about which variables matter.
+The difference in root split between GUIDE (review_scores_rating) and ctree (accommodates) does not indicate disagreement between the models. The root split identifies the single best first partition of the data, which is sensitive to the specific dataset and splitting criterion used. GUIDE and ctree use different split-selection criteria, so different root splits do not necessarily indicate disagreement about which variables matter overall. These are different criteria and can legitimately produce different root splits while still agreeing on the overall importance structure. The fact that both variables appear prominently in both trees (accommodates as GUIDE's top importance score and ctree's root, review_scores_rating as GUIDE's root and tied for top in ctree) suggests both are genuinely influential, with the ordering depending on how "importance" is measured rather than reflecting a true disagreement about which variables matter.
 
 ### Statistical significance
 
-All splits are statistically significant, with every node in the ctree shows a p-value, and all are significant. This is meaningful because unlike GUIDE where most splits had gray circles (not statistically significant), every split ctree made passed the Bonferroni-corrected threshold. The variables that appear here are statistically supported, not just predictively useful.
+All splits in the ctree are statistically significant. Unlike GUIDE, where many splits are marked with gray circles to indicate a lack of statistical significance, every split selected by ctree passes the Bonferroni-corrected threshold. This suggests that the variables used in the ctree are not only predictively useful but also statistically supported under a stricter splitting criterion.
 
 ### Key variables that appear 
 
-accommodates, review_scores_rating, reviews_per_month, minimum_nights, beds all appear as split variables, consistent with what GUIDE and the random forests found.
+The variables `accommodates`, `review_scores_rating`, `reviews_per_month`, `minimum_nights`, and `beds` all appear as split variables, which is broadly consistent with the GUIDE and random forest results.
 
 ### Tree size 
 
@@ -461,7 +469,7 @@ To verify the results obtained from the GUIDE regression tree, additional models
 
 Before fitting the models, the dataset was cleaned by converting categorical boolean variables to numeric values and removing rows containing missing values. The response variable was the log-transformed listing price.
 
-The dataset was split into training and testing sets using an 80/20 split. To ensure proper out of sample evaluation, all Python models were assessed exclusively on held-out test set, following a fixed random seed of 42 for reproducibility. A random forest model with 500 trees was then trained to obtain stable estimates of variable importance.
+The dataset was split into training and testing sets using an 80/20 split. To ensure proper out-of-sample evaluation, all Python models were assessed on a held-out test set, using a fixed random seed of 42 for reproducibility. A random forest model with 500 trees was then trained to obtain stable estimates of variable importance.
 
 This is the code used to make the train/test split:
 
@@ -514,7 +522,7 @@ print("Random Forest CV R2:", scores.mean())
 
 ### Random Forest (Imputing NaNs)
 
-Similarly, another random forest with 500 trees was trained with the difference of training on the full dataset after mean imputation of missing values. Here is the code for the imputation:
+A second random forest with 500 trees was then trained after mean imputation of missing values so that the full dataset could be retained. Here is the code for the imputation:
 
 ```Python
 imputer = SimpleImputer(strategy="mean")
@@ -522,7 +530,7 @@ X_train = pd.DataFrame(imputer.fit_transform(X_train), columns=X.columns)
 X_test = pd.DataFrame(imputer.transform(X_test), columns=X.columns)
 ```
 
-Both a train/test split evaluation and a 10-fold cross-validation were applied to confirm consistency across evaluation methods, reusing the same code from before, but with the added imputed row values within the df:
+Both a train/test split evaluation and a 10-fold cross-validation were again applied to assess consistency across evaluation methods, using the imputed predictor matrix in place of the complete-case version:
 
 ```Python
 rf = RandomForestRegressor(n_estimators=500, random_state=42)
@@ -542,11 +550,11 @@ print("Random Forest CV R2:", scores.mean())
 
 Note on model comparability: GUIDE's R2 of 0.72 is a training R2 (labeled "Proportion of variance explained by tree model" in GUIDE's output), while all Python model scores are measured on a held-out test set. These numbers are not directly comparable, and GUIDE's score would likely be lower on unseen data. Rather than treating R2 as a performance ranking across models, this analysis focuses on whether the models agree on which predictors matter most.
 
-**Explanation of trustworthiness of results:**
+**Interpretation of model reliability:**
 
 The linear regression model achieved an R2 of 0.45, and a cross-validated score of 0.48. The consistency between the two scores indicates the model is stable. This score is expected, as a simple linear equation cannot capture the seemingly nonlinear relationships present in the data.
 
-Both random forest models outperformed linear regression substantially. The model trained on dropped NaNs achieved an R2 of 0.65 and a cross-validated score of 0.66, while the model trained on imputed NaNs achieved an R² of 0.64 and a cross-validated score of 0.65. Both show strong consistency between evaluation methods, and the near-identical performance between the two random forests suggests that mean imputation introduces minimal distortion. The additional approximate 1,000 rows retained through imputation did not meaningfully hurt predictive accuracy.
+Both random forest models outperformed linear regression substantially. The model trained on dropped NaNs achieved an R2 of 0.65 and a cross-validated score of 0.66, while the model trained on imputed NaNs achieved an R2 of 0.64 and a cross-validated score of 0.65. Both show strong consistency between evaluation methods, and the near-identical performance between the two random forests suggests that mean imputation introduces minimal distortion. The additional approximate 1,000 rows retained through imputation did not meaningfully hurt predictive accuracy.
 
 --- 
 
@@ -586,7 +594,7 @@ GUIDE also provides a variable importance ranking that measures how strongly eac
   </div>
 </div>
 
-**Note:** review_scores_rating is ranked fourth GUIDE. GUIDE's importance score measures a variable's cumulative contribution across all nodes in the tree, while the root split reflects which variable best partitions the data at the first single step. accommodates dominates importance because it appears repeatedly throughout the tree, accumulating score across many splits, while review_scores_rating provides the single best initial binary partition of the data, cleanly separating higher- and lower-priced listings before any other variable is considered. These two metrics are measuring different things.
+**Note:** `review_scores_rating` is ranked fourth in GUIDE's overall importance table. GUIDE's importance score reflects a variable's cumulative contribution across the entire tree, whereas the root split identifies the single variable that provides the strongest first partition of the data. `accommodates` ranks first overall because it appears repeatedly throughout the tree, while `review_scores_rating` provides the strongest initial split. In other words, these measures capture different aspects of model importance.
 
 **Implementation note:** I created a simple Python script to read the data as is from the txt file generated by GUIDE, allowing me to graph it later:
 
@@ -706,44 +714,44 @@ print(importance_df[["Variable", "Score", "Normalized"]].sort_values("Score", as
 
 ### Comparison between GUIDE and ctree
 
-The only variable in the top 3 of both GUIDE and ctree is accommodates, which ranks first in both. Beyond that the rankings diverge, as GUIDE emphasizes property size variables (beds, bathrooms) while ctree emphasizes review-related variables (review_scores_rating, reviews_per_month). This difference is partly methodological: GUIDE's importance score weights splits by how much they reduced prediction error, favoring variables that make fewer but more impactful splits, while ctree's importance is a raw count of split appearances, favoring variables that appear repeatedly.
+The only variable that appears in the top three for both GUIDE and ctree is `accommodates`, which ranks first in both. Beyond that, the rankings diverge: GUIDE places more emphasis on structural listing features such as `beds` and `bathrooms`, whereas ctree gives more weight to review-related variables such as `review_scores_rating` and `reviews_per_month`. This difference is partly methodological. GUIDE's importance score reflects how much each split reduces prediction error, whereas the ctree comparison is based on split frequency across the tree. As a result, the two rankings are informative but not directly equivalent.
 
 ### Comparison between dropped and imputed
 
-The top two variables are identical in both, in which accommodates is by far the most important in both cases, and bathrooms holds second place. The main differences are:
+The top three variables are identical in both (minus some changes in scoring), and accommodates is by far the most important in both cases. The main differences are:
 
-* `accommodates` dropped from 0.421 to 0.371, so it's slightly less dominant with imputation
-* `bathrooms`' normalized score went up from 36.42 to 41.26 and is now relatively more important when accommodates weakens
-* `reviews_per_month` got weaker (0.103 to 0.078)
-* The middle variables shuffled slightly: 
-  * `review_scores_rating` dropped from 4th to 6th
-  * `number_of_reviews` moved up from 5th to 3rd
-  * `host_acceptance_rate` moved up from 6th to 4th
-  * `maximum_nights moved` up from 7th to 5th (tied area)
-* `has_availability` went from exactly 0.000 to 0.001, essentially still zero but imputation recovered a tiny signal
+* `accommodates` declines from 0.421 to 0.371, making it slightly less dominant after imputation.
+* `bathrooms`' normalized score rises from 36.42 to 41.26, making it relatively more important as `accommodates` weakens.
+* `reviews_per_month` becomes less important, falling from 0.103 to 0.078.
+* `maximum_nights` moves from 7th to 5th, into the cluster of mid-ranked variables.
+* `has_availability` increases from 0.000 to 0.001, which is still effectively zero but suggests that imputation recovers a negligible amount of signal.
 
-This essentially means that the ranking shifts are minor and confined to the middle of the importance list. The top three variables remain unchanged in both position and relative dominance, and everything from minimum_nights downward holds its order exactly. The small reshuffling in the middle is expected given how similarly scored those variables are, where minor variation in the training data can cause reordering among near-tied variables. Overall, the two models agree strongly on which variables matter and by how much, suggesting that the choice of how to handle missing values has negligible impact on the conclusions drawn from variable importance.
+Overall, the ranking shifts are minor and mostly confined to the middle of the importance table. The leading predictors remain the same, and the lower-ranked variables are nearly unchanged across the two models. This small amount of reshuffling is expected when several predictors have very similar scores. Substantively, both models tell the same story: the choice between dropping and imputing missing values has little effect on the main conclusions drawn from variable importance.
 
 ### Comparison between GUIDE and Random Forest 
 
-Both sets of models identify **accommodates** as the most important predictor overall based on variable importance scores.
+Across GUIDE and both random forest models, **accommodates** is the most important predictor of price.
 
-Property characteristics such as bathrooms and beds rank highly in the GUIDE importance scores and are similarly influential in both random forest models, with the caveat of beds being in the lower end compared to GUIDE. These results indicate that structural features of the listing play an important role in determining price.
+Structural listing characteristics also matter consistently. `bathrooms` and `beds` rank highly in GUIDE, and although `beds` is less prominent in the random forest models, both approaches still point to listing size and layout as important drivers of price.
 
-Review-related variables such as review_scores_rating, reviews_per_month, and number_of_reviews also appear among the important predictors across all three models. These variables likely capture aspects of guest satisfaction and listing popularity, which can influence demand and therefore pricing.
+Review-related variables such as `review_scores_rating`, `reviews_per_month`, and `number_of_reviews` also appear among the important predictors across models. These variables likely capture guest satisfaction, listing visibility, and demand, all of which can affect pricing.
 
-Although the exact importance rankings differ slightly between GUIDE and the random forest models, the two random forest variants themselves are in strong agreement (the minor reshuffling observed in the middle of the importance list has no bearing on the overall conclusions). The broad overlap in key predictors across all three models suggests that these relationships are robust across modeling approaches and missing data strategies, rather than artifacts of any specific algorithm or preprocessing choice.
+Although the exact rankings differ somewhat between GUIDE and random forest, the overlap in the leading predictors is substantial, and the two random forest variants agree especially closely. Taken together, these results suggest that the observed relationships are robust across modeling approaches and missing-data strategies rather than artifacts of one specific algorithm or preprocessing decision.
 
 --- 
 
 # Conclusion
-This analysis used the GUIDE regression tree algorithm to identify predictors of Airbnb listing prices and compared the results with models trained in Python and a conditional inference tree fit in R. Across all models, accommodates consistently emerged as the most influential predictor, suggesting that listing capacity is the primary driver of price. GUIDE additionally identifies beds and bathrooms as strong contributors, while the random forests emphasize bathrooms and reviews_per_month, and ctree highlights review_scores_rating and reviews_per_month alongside accommodates. The partial agreement across methods suggests that property characteristics and review-related variables have a consistent relationship with listing price, while differences in rankings reflect each method's sensitivity to different aspects of the data.
 
-In the real world, guests also take missing information into account when booking. A listing without reviews or an unresponsive host may signal uncertainty, making guests less likely to book regardless of price. This suggests that missing values in variables like review_scores_rating and host_acceptance_rate are not purely a data quality issue, but may themselves reflect meaningful listing characteristics.
+This analysis used GUIDE regression trees to identify predictors of Airbnb listing prices and then compared those results with a conditional inference tree in R and random forest models in Python. Across all approaches, `accommodates` consistently emerged as the strongest predictor, indicating that listing capacity is the most important driver of price in this dataset.
 
-The most notable discrepancy across models is the role of beds, which ranks second in GUIDE but near the bottom in both random forests and ctree. This likely reflects the high correlation between beds, bathrooms, and accommodates. GUIDE may be capturing beds as a proxy for overall listing size, while the other models distribute that predictive credit more heavily onto accommodates and bathrooms.
+Beyond that, the models largely agree that structural features such as `bathrooms` and `beds`, along with review-related measures such as `review_scores_rating` and `reviews_per_month`, all play meaningful roles. Differences in exact ranking are best interpreted as differences in how each method allocates predictive credit, not as contradictions in the overall findings.
 
-Overall, the convergence across four distinct modeling approaches (GUIDE, ctree, and two random forest variants) on listing capacity and property characteristics as the primary drivers of Airbnb pricing lends strong confidence to these findings. While no two methods rank all variables identically, their agreement on the most dominant predictor is consistent and robust.
+From a practical standpoint, missing information may itself be informative. A listing with no reviews or a host with limited response history can signal uncertainty to potential guests, which may influence booking behavior and, indirectly, pricing. For that reason, missing values in variables such as `review_scores_rating` and `host_acceptance_rate` should not be viewed only as a data quality issue; they may also reflect meaningful listing characteristics.
+
+The clearest discrepancy across models is the role of `beds`, which ranks much higher in GUIDE than it does in the random forests or ctree. A plausible explanation is that `beds`, `bathrooms`, and `accommodates` all capture related aspects of listing size, so different models distribute their predictive importance differently.
+
+Overall, the convergence across four distinct modeling approaches provides strong evidence that listing capacity and other structural features are central drivers of Airbnb pricing. While the methods do not rank every variable identically, they support the same broad conclusion, making the final interpretation stable and credible.
+
 
 <br><br>
 
