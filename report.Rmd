@@ -161,7 +161,7 @@ The Airbnb dataset used for this analysis was obtained from Kaggle and imported 
 
 <div style="display: flex; gap: 20px; align-items: flex-start;">
 <div>
-To prepare the dataset for regression tree modeling, a subset of variables relevant to pricing was selected. These variables include host characteristics, listing capacity, availability indicators, and review information. Variables were chosen to reflect factors that guests and hosts commonly consider when setting or evaluating listing prices, while excluding identifiers and redundant derived columns.  
+A subset of variables relevant to pricing was selected for regression tree modeling, including host characteristics, listing capacity, availability, and review information. These were chosen to reflect key factors influencing prices, while excluding identifiers and redundant columns.
 
 The selected variables were:
 
@@ -346,12 +346,12 @@ knitr::include_graphics("cropped_tree.png")
 **R-squared explained by tree model:** 0.7224  
 **Final tree size:** 50 terminal nodes, 99 total nodes. Reflects a moderately complex model that balances predictive accuracy with interpretability.
 
+A smaller tree would be easier to interpret at a glance, but would sacrifice the granularity needed to capture the complex interactions between listing capacity, host behavior, and review characteristics that drive Airbnb pricing. The 50-node structure reflects a deliberate tradeoff: enough complexity to meaningfully partition the data, while remaining interpretable at the level of individual paths through the tree.
+
 **RMSE results:**
 
 * GUIDE CV MSE = 0.2738
 * GUIDE CV RMSE = sqrt(0.2738) = 0.5232590181
-
-A smaller tree would be easier to interpret at a glance, but would sacrifice the granularity needed to capture the complex interactions between listing capacity, host behavior, and review characteristics that drive Airbnb pricing. The 50-node structure reflects a deliberate tradeoff: enough complexity to meaningfully partition the data, while remaining interpretable at the level of individual paths through the tree.
 
 ---
 
@@ -773,8 +773,6 @@ print(importance_df[["Variable", "Score", "Normalized"]].sort_values("Score", as
   </div>
 </div>
 
-
-
 ---
 
 # 9. Variable Importance: Cross-Method Comparison
@@ -878,6 +876,8 @@ The ctree and GUIDE models performed similarly, with ctree producing an RMSE of 
 Linear regression had the largest errors, especially under mean imputation, with RMSE values of 0.544 and 0.580. This is consistent with the expectation that a simple linear model is less able to capture nonlinear relationships between listing characteristics and price.
 
 Because the response variable is log-transformed, the RMSE values are not dollar errors directly. To make the results more interpretable, the log-scale RMSE values were also converted into approximate dollar errors using the median listing price of $115. Under this interpretation, the random forest models have the smallest approximate errors, while GUIDE and ctree remain in the middle and linear regression performs worst overall.
+
+**Note:** While direct RMSE comparison across all models is limited by differences in evaluation methodology, the random forest models consistently produced the lowest prediction error, followed by GUIDE and ctree, with linear regression performing worst.
 
 ---
 
